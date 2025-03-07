@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Romane Dice Paradise",
+    "subtitle": "Le paradis des dés enchantés"
+  },
+  "common": {
+    "cancel": "Annuler",
+    "confirm": "Confirmer"
+  },
+  "players": {
+    "input": {
+      "placeholder": "Nom du joueur"
+    },
+    "actions": {
+      "add": "Ajouter",
+      "remove": "Supprimer"
+    },
+    "status": {
+      "active": "En cours",
+      "empty": "✨ Ajoutez des joueurs pour commencer",
+      "maxPlayers": "Maximum 6 joueurs"
+    }
+  },
+  "game": {
+    "controls": {
+      "title": "Contrôles de partie",
+      "start": "Démarrer",
+      "end": "Terminer",
+      "minPlayers": "Il faut au moins 2 joueurs pour démarrer"
+    },
+    "actions": {
+      "end": "Terminer la partie",
+      "start": "Démarrer",
+      "newGame": "Nouvelle partie"
+    },
+    "endGame": {
+      "title": "Terminer la partie ?",
+      "description": "Cette action mettra fin à la partie en cours et réinitialisera tous les scores. Cette action est irréversible."
+    }
+  },
+  "victory": {
+    "congratulations": "Félicitations !",
+    "wins": "remporte la partie",
+    "points": "points",
+    "finalScores": "Scores finaux",
+    "newGame": "Nouvelle partie"
+  },
+  "scoreModal": {
+    "chance": {
+      "placeholder": "1-30",
+      "help": "Entrez une valeur entre 1 et 30",
+      "validate": "Valider"
+    },
+    "common": {
+      "cancel": "Barrer (0)"
+    },
+    "categories": {
+      "ones": {
+        "name": "As",
+        "description": "Total des 1"
+      },
+      "twos": {
+        "name": "Deux",
+        "description": "Total des 2"
+      },
+      "threes": {
+        "name": "Trois",
+        "description": "Total des 3"
+      },
+      "fours": {
+        "name": "Quatre",
+        "description": "Total des 4"
+      },
+      "fives": {
+        "name": "Cinq",
+        "description": "Total des 5"
+      },
+      "sixes": {
+        "name": "Six",
+        "description": "Total des 6"
+      },
+      "threeOfAKind": {
+        "name": "Brelan",
+        "description": "3 dés identiques"
+      },
+      "fourOfAKind": {
+        "name": "Carré",
+        "description": "4 dés identiques"
+      },
+      "fullHouse": {
+        "name": "Full",
+        "description": "3 + 2 dés identiques"
+      },
+      "smallStraight": {
+        "name": "Petite suite",
+        "description": "4 dés qui se suivent"
+      },
+      "largeStraight": {
+        "name": "Grande suite",
+        "description": "5 dés qui se suivent"
+      },
+      "yahtzee": {
+        "name": "Yams",
+        "description": "5 dés identiques"
+      },
+      "chance": {
+        "name": "Chance",
+        "description": "Total de tous les dés"
+      }
+    }
+  }
+} 
