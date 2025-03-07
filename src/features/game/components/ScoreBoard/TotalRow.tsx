@@ -1,24 +1,85 @@
 import { FC } from 'react';
+import { CategoryCell } from './CategoryCell';
+import { ScoreCategoryUI } from '../../constants/categories';
+import { ScoreCategory } from '@/types/game';
 
 interface TotalRowProps {
-  label: string;
+  label?: string;
   values: number[];
-  className?: string | ((value: number) => string);
+  players: number;
+  className?: (value: number) => string;
+  hideLabel?: boolean;
+  isBonus?: boolean;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
 }
 
-export const TotalRow: FC<TotalRowProps> = ({ label, values, className = 'bg-white/10 text-white' }) => (
-  <div className="grid gap-0.5" style={{ gridTemplateColumns: `160px repeat(${values.length}, 1fr)` }}>
-    <div className="bg-white/10 p-2 rounded-lg h-10 flex items-center">
-      <div className="font-bold text-white text-sm">{label}</div>
-    </div>
-    {values.map((value, index) => (
-      <div key={index} className="px-0.5">
-        <div className={`w-full h-10 flex items-center justify-center font-bold text-lg rounded-lg ${
-          typeof className === 'function' ? className(value) : className
-        }`}>
-          {value > 0 ? (typeof className === 'function' ? `+${value}` : value) : '-'}
+export const TotalRow: FC<TotalRowProps> = ({
+  label,
+  values,
+  players,
+  className,
+  hideLabel = false,
+  isBonus = false,
+  isExpanded = false,
+  onToggleExpand
+}) => {
+  if (isBonus) {
+    const bonusCategory: ScoreCategoryUI = {
+      id: 'chance' as ScoreCategory,
+      name: 'Bonus (+35pts)',
+      description: 'Au dela de 62 points ci dessus.',
+      icon: '🤑',
+      color: 'from-emerald-400/10 to-emerald-500/10',
+      section: 'upper'
+    };
+
+    return (
+      <div className="grid gap-x-2" style={{ gridTemplateColumns: '44px minmax(0, 1fr)' }}>
+        <CategoryCell
+          category={bonusCategory}
+          isExpanded={isExpanded}
+          isFocused={false}
+          onFocus={onToggleExpand}
+        />
+        <div className="grid gap-x-1" style={{ gridTemplateColumns: `repeat(${players}, 1fr)` }}>
+          {values.map((value, index) => (
+            <div
+              key={index}
+              className={`
+                h-12 flex items-center justify-center font-bold rounded-lg
+                ${className ? className(value) : 'bg-white/10 text-white'}
+              `}
+            >
+              {value}
+            </div>
+          ))}
         </div>
       </div>
-    ))}
-  </div>
-); 
+    );
+  }
+
+  return (
+    <div className="grid gap-x-2" style={{ gridTemplateColumns: '44px minmax(0, 1fr)' }}>
+      {!hideLabel && label && (
+        <div className="h-12 flex items-center justify-center font-bold text-white/90 text-sm">
+          {label}
+        </div>
+      )}
+      {hideLabel && <div className="h-12" />}
+      <div className="grid gap-x-1" style={{ gridTemplateColumns: `repeat(${players}, 1fr)` }}>
+        {values.map((value, index) => (
+          <div
+            key={index}
+            className={`
+              h-12 flex items-center justify-center font-bold rounded-lg
+              ${className ? className(value) : 'bg-white/10 text-white'}
+            `}
+          >
+            {value}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}; 

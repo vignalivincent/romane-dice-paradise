@@ -1,23 +1,32 @@
 import { create } from 'zustand';
-import { GameState, Player, ScoreCategory } from '@/types/game';
+import { GameState, Player, ScoreCategory, GameHistory } from '@/types/game';
 
 // Constantes du jeu
+const MAX_PLAYERS = 6;
 const UPPER_BONUS_THRESHOLD = 62;
 const UPPER_BONUS_VALUE = 35;
-const MAX_PLAYERS = 6;
 const STORAGE_KEY = 'romane-dice-paradise-game-state';
 
 // Fonction pour charger l'état depuis le localStorage
-const loadState = (): Partial<GameState> => {
+const loadState = (): GameState => {
   try {
     const savedState = localStorage.getItem(STORAGE_KEY);
     if (savedState) {
-      return JSON.parse(savedState);
+      const parsedState = JSON.parse(savedState);
+      return {
+        players: parsedState.players || [],
+        isStarted: parsedState.isStarted || false,
+        gameHistory: parsedState.gameHistory || [],
+      };
     }
   } catch (error) {
     console.error('Error loading state:', error);
   }
-  return {};
+  return {
+    players: [],
+    isStarted: false,
+    gameHistory: [],
+  };
 };
 
 // Fonction pour sauvegarder l'état dans le localStorage
@@ -26,6 +35,7 @@ const saveState = (state: GameState) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       isStarted: state.isStarted,
       players: state.players,
+      gameHistory: state.gameHistory || [],
     }));
   } catch (error) {
     console.error('Error saving state:', error);
@@ -43,6 +53,7 @@ interface GameStore extends GameState {
   getScoreStyle: (score: number | undefined, maxScore: number) => string;
   getPlayersWithTotalScores: () => Array<{ name: string; score: number }>;
   canAddPlayer: () => boolean;
+  hasGameHistory: () => boolean;
   
   // Players actions
   addPlayer: (name: string) => void;
@@ -52,15 +63,12 @@ interface GameStore extends GameState {
   // Game actions
   startGame: () => void;
   endGame: () => void;
+  startNewGameWithSamePlayers: () => void;
+  resetGame: () => void;
 }
 
-// Charger l'état initial depuis le localStorage
-const initialState = loadState();
-
 export const useGameStore = create<GameStore>((set, get) => ({
-  // Initial state with localStorage
-  isStarted: initialState.isStarted || false,
-  players: initialState.players || [],
+  ...loadState(),
 
   // Getters
   getMaxScore: (category) => {
@@ -71,8 +79,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       case 'fours': return 20;
       case 'fives': return 25;
       case 'sixes': return 30;
-      case 'threeOfAKind': return 18;
-      case 'fourOfAKind': return 24;
+      case 'threeOfAKind': return 30;
+      case 'fourOfAKind': return 30;
       case 'fullHouse': return 25;
       case 'smallStraight': return 30;
       case 'largeStraight': return 40;
@@ -88,7 +96,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         if (section === 'upper') {
           return ['ones', 'twos', 'threes', 'fours', 'fives', 'sixes'].includes(category);
         }
-        return ['threeOfAKind', 'fourOfAKind', 'fullHouse', 'smallStraight', 'largeStraight', 'yahtzee', 'chance'].includes(category);
+        return !['ones', 'twos', 'threes', 'fours', 'fives', 'sixes'].includes(category);
       });
     
     return categories.reduce((sum, [_, score]) => sum + (score || 0), 0);
@@ -96,8 +104,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   calculateTotal: (player) => {
     const upperTotal = get().calculateSectionTotal(player, 'upper');
-    const bonus = upperTotal >= UPPER_BONUS_THRESHOLD ? UPPER_BONUS_VALUE : 0;
-    return upperTotal + bonus + get().calculateSectionTotal(player, 'lower');
+    const lowerTotal = get().calculateSectionTotal(player, 'lower');
+    const bonus = get().getUpperBonus(player);
+    return upperTotal + lowerTotal + bonus;
   },
 
   getUpperBonus: (player) => {
@@ -163,12 +172,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
     return players.length < MAX_PLAYERS;
   },
 
+  hasGameHistory: () => {
+    const { gameHistory } = get();
+    return gameHistory.length > 0;
+  },
+
   // Players actions with persistence
   addPlayer: (name) =>
-    set((state) => {
-      if (state.players.length >= MAX_PLAYERS) return state;
+    set((state): GameState => {
+      // Vérifier si le nom existe déjà (insensible à la casse)
+      const nameExists = state.players.some(
+        player => player.name.toLowerCase() === name.toLowerCase()
+      );
+      
+      if (nameExists || state.players.length >= MAX_PLAYERS) return state;
 
       const newState = {
+        ...state,
         players: [
           ...state.players,
           {
@@ -179,23 +199,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ],
       };
 
-      saveState({ ...state, ...newState });
+      saveState(newState);
       return newState;
     }),
 
   removePlayer: (id) =>
-    set((state) => {
+    set((state): GameState => {
+      // Filtrer l'historique pour supprimer toutes les parties où le joueur apparaît
+      const newGameHistory = state.gameHistory.filter(game => 
+        !game.players.some(player => player.id === id)
+      );
+
       const newState = {
-        players: state.players.filter((player) => player.id !== id),
+        ...state,
+        players: state.players.filter((p) => p.id !== id),
+        gameHistory: newGameHistory,
       };
 
-      saveState({ ...state, ...newState });
+      saveState(newState);
       return newState;
     }),
 
   updatePlayerScore: (playerId, category, value) =>
-    set((state) => {
+    set((state): GameState => {
       const newState = {
+        ...state,
         players: state.players.map((player) =>
           player.id === playerId
             ? {
@@ -209,24 +237,73 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ),
       };
 
-      saveState({ ...state, ...newState });
+      saveState(newState);
       return newState;
     }),
 
   // Game actions with persistence
   startGame: () =>
-    set((state) => {
-      const newState = { isStarted: true };
-      saveState({ ...state, ...newState });
+    set((state): GameState => {
+      const newState = { ...state, isStarted: true };
+      saveState(newState);
       return newState;
     }),
 
   endGame: () =>
-    set(() => {
-      const newState = {
-        isStarted: false,
-        players: [],
+    set((state): GameState => {
+      const winner = get().getLeadingPlayer();
+      if (!winner) return state;
+
+      // Sauvegarder la partie dans l'historique
+      const gameRecord: GameHistory = {
+        id: crypto.randomUUID(),
+        date: new Date().toISOString(),
+        players: state.players.map(player => ({
+          id: player.id,
+          name: player.name,
+          score: get().calculateTotal(player)
+        })),
+        winnerId: winner.id
       };
+
+      // Réinitialiser les scores des joueurs
+      const newState = {
+        ...state,
+        isStarted: false,
+        players: state.players.map(player => ({
+          ...player,
+          scores: {}
+        })),
+        gameHistory: [...state.gameHistory, gameRecord]
+      };
+
+      saveState(newState);
+      return newState;
+    }),
+
+  startNewGameWithSamePlayers: () =>
+    set((state): GameState => {
+      const newState = {
+        ...state,
+        isStarted: true,
+        players: state.players.map(player => ({
+          ...player,
+          scores: {}
+        }))
+      };
+
+      saveState(newState);
+      return newState;
+    }),
+
+  resetGame: () =>
+    set((): GameState => {
+      const newState = {
+        players: [],
+        isStarted: false,
+        gameHistory: []
+      };
+
       saveState(newState);
       return newState;
     }),

@@ -2,8 +2,10 @@ import { FC } from 'react';
 import { ScoreCategory } from '@/types/game';
 import { ChanceInput } from './ChanceInput';
 import { ScoreGrid } from './ScoreGrid';
+import { AdditionalScoreGrid } from './AdditionalScoreGrid';
 import { ModalHeader } from './ModalHeader';
 import { useScoreModal } from '../../hooks/useScoreModal';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface ScoreModalProps {
   isOpen: boolean;
@@ -14,6 +16,7 @@ interface ScoreModalProps {
     name: string;
     description: string;
   };
+  playerName: string;
 }
 
 export const ScoreModal: FC<ScoreModalProps> = (props) => {
@@ -23,25 +26,26 @@ export const ScoreModal: FC<ScoreModalProps> = (props) => {
     handleChanceSubmit,
     handleBarrer,
     handleScoreSelect,
+    handleAdditionalScoreSelect,
     possibleScores,
+    additionalScores,
+    baseScore,
+    needsAdditionalScore,
   } = useScoreModal(props);
 
-  if (!props.isOpen) return null;
-
   return (
-    <div 
-      className="fixed inset-0 flex h-screen w-screen items-center justify-center p-4 z-50 bg-black/40"
-      onClick={props.onClose}
-    >
-      <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 space-y-6 transform transition-all relative"
-        onClick={e => e.stopPropagation()}
-      >
-        <ModalHeader
-          title={props.category.name}
-          description={props.category.description}
-          onClose={props.onClose}
-        />
+    <Dialog open={props.isOpen} onOpenChange={props.onClose}>
+      <DialogContent fullWidth className="space-y-6">
+        <div className="space-y-6">
+          <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-2 rounded-full shadow-lg border-2 border-white/30 font-bold text-lg text-center">
+            {props.playerName}
+          </div>
+          <ModalHeader
+            title={props.category.name}
+            description={props.category.description}
+            onClose={props.onClose}
+          />
+        </div>
 
         {props.category.id === 'chance' ? (
           <ChanceInput
@@ -50,6 +54,13 @@ export const ScoreModal: FC<ScoreModalProps> = (props) => {
             onSubmit={handleChanceSubmit}
             onBarrer={handleBarrer}
           />
+        ) : needsAdditionalScore ? (
+          <AdditionalScoreGrid
+            scores={additionalScores}
+            onSelect={handleAdditionalScoreSelect}
+            baseScore={baseScore!}
+            category={props.category.id}
+          />
         ) : (
           <ScoreGrid
             scores={possibleScores}
@@ -57,7 +68,7 @@ export const ScoreModal: FC<ScoreModalProps> = (props) => {
             onBarrer={handleBarrer}
           />
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }; 

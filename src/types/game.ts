@@ -7,13 +7,27 @@ export type Scores = {
   [K in ScoreCategory]?: number;
 };
 
-export type Player = {
+export interface Player {
   id: string;
   name: string;
-  scores: Scores;
-};
+  scores: {
+    [key in ScoreCategory]?: number;
+  };
+}
 
-export type GameState = {
-  isStarted: boolean;
+export interface GameHistory {
+  id: string;
+  date: string;
+  players: Array<{
+    id: string;
+    name: string;
+    score: number;
+  }>;
+  winnerId: string;
+}
+
+export interface GameState {
   players: Player[];
-}; 
+  isStarted: boolean;
+  gameHistory: GameHistory[];
+} 

@@ -19,6 +19,7 @@ export const useScoreModal = ({
   category,
 }: UseScoreModalProps) => {
   const [chanceValue, setChanceValue] = useState<string>('');
+  const [baseScore, setBaseScore] = useState<number | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -32,7 +33,10 @@ export const useScoreModal = ({
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (isOpen) setChanceValue('');
+    if (isOpen) {
+      setChanceValue('');
+      setBaseScore(null);
+    }
   }, [isOpen]);
 
   const handleChanceSubmit = () => {
@@ -49,8 +53,19 @@ export const useScoreModal = ({
   };
 
   const handleScoreSelect = (score: number) => {
-    onSelect(score);
-    onClose();
+    if (category.id === 'threeOfAKind' || category.id === 'fourOfAKind') {
+      setBaseScore(score);
+    } else {
+      onSelect(score);
+      onClose();
+    }
+  };
+
+  const handleAdditionalScoreSelect = (score: number) => {
+    if (baseScore !== null) {
+      onSelect(baseScore + score);
+      onClose();
+    }
   };
 
   const calculatePossibleScores = (category: ScoreCategory): number[] => {
@@ -72,12 +87,24 @@ export const useScoreModal = ({
     }
   };
 
+  const calculateAdditionalScores = (category: ScoreCategory): number[] => {
+    switch (category) {
+      case 'threeOfAKind': return Array.from({ length: 12 }, (_, i) => i + 1);
+      case 'fourOfAKind': return Array.from({ length: 6 }, (_, i) => i + 1);
+      default: return [];
+    }
+  };
+
   return {
     chanceValue,
     setChanceValue,
     handleChanceSubmit,
     handleBarrer,
     handleScoreSelect,
+    handleAdditionalScoreSelect,
     possibleScores: calculatePossibleScores(category.id),
+    additionalScores: calculateAdditionalScores(category.id),
+    baseScore,
+    needsAdditionalScore: (category.id === 'threeOfAKind' || category.id === 'fourOfAKind') && baseScore !== null,
   };
 }; 

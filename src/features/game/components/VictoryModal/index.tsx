@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface VictoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  winner: {
+  winner?: {
     name: string;
     score: number;
   };
@@ -22,33 +23,34 @@ export const VictoryModal: FC<VictoryModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  if (!isOpen) return null;
+  // Si pas de gagnant, on prend le joueur avec le plus haut score
+  const actualWinner = winner || players.reduce((prev, current) => 
+    (current.score > prev.score) ? current : prev
+  , players[0]);
+
+  if (!actualWinner) return null;
 
   return (
-    <div 
-      className="fixed inset-0 flex h-screen w-screen items-center justify-center p-4 z-50 backdrop-blur-sm bg-black/30"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-lg p-6 space-y-6 transform transition-all relative border border-white/20"
-        onClick={e => e.stopPropagation()}
-      >
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent fullWidth className="space-y-6">
         <div className="text-center space-y-4">
           <div className="text-6xl animate-bounce">🏆</div>
           <h2 className="text-3xl font-bold text-purple-900">
-            {t('victory.congratulations')}
+            {t('victory.title')}
           </h2>
           <p className="text-xl text-purple-600">
-            {winner.name} {t('victory.wins')} !
+            <b> {actualWinner.name}</b> {t('victory.winner')}
           </p>
-          <p className="text-2xl font-bold text-purple-900">
-            {winner.score} {t('victory.points')}
-          </p>
+          <div className="inline-block border-2 border-purple-900 rounded-lg px-4 py-2">
+            <p className="text-2xl font-bold text-purple-900">
+              {actualWinner.score} {t('victory.points')}
+            </p>
+          </div>
         </div>
 
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-purple-900">
-            {t('victory.finalScores')}:
+            {t('victory.scores')}
           </h3>
           <div className="space-y-2">
             {players
@@ -76,11 +78,11 @@ export const VictoryModal: FC<VictoryModalProps> = ({
 
         <button
           onClick={onClose}
-          className="w-full bg-purple-100 hover:bg-purple-200 text-purple-900 font-bold py-4 rounded-xl transition-colors text-xl shadow-sm hover:shadow-md"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition-colors text-xl shadow-md hover:shadow-lg border-2 border-purple-400"
         >
-          {t('victory.newGame')}
+          {t('victory.actions.newGame')}
         </button>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }; 

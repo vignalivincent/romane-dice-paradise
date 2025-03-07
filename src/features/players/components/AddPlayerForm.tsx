@@ -1,15 +1,18 @@
 import { FC, useState, KeyboardEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
 import { generateBarbaName } from '@/utils/nameGenerator';
 import { useGameStore } from '@/features/game/store/gameStore';
 
 interface AddPlayerFormProps {
-  onAdd: (name: string) => void;
+  onAdd: (name: string) => boolean;
   disabled: boolean;
   placeholder: string;
   addLabel: string;
 }
+
+const MAX_NAME_LENGTH = 10;
 
 export const AddPlayerForm: FC<AddPlayerFormProps> = ({
   onAdd,
@@ -19,17 +22,38 @@ export const AddPlayerForm: FC<AddPlayerFormProps> = ({
 }) => {
   const [name, setName] = useState('');
   const canAddPlayer = useGameStore(state => state.canAddPlayer);
+  const { toast } = useToast();
 
   const handleAdd = () => {
     if (name.trim()) {
-      onAdd(name.trim());
-      setName('');
+      const success = onAdd(name.trim());
+      if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Erreur",
+          description: "Un joueur avec ce nom existe déjà",
+        });
+      } else {
+        toast({
+          variant: "default",
+          title: "Succès",
+          description: "Le joueur a été ajouté",
+        });
+        setName('');
+      }
     }
   };
 
   const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleAdd();
+    }
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= MAX_NAME_LENGTH) {
+      setName(value);
     }
   };
 
@@ -43,11 +67,12 @@ export const AddPlayerForm: FC<AddPlayerFormProps> = ({
     <div className="flex flex-col sm:flex-row gap-3 w-full">
       <div className="flex-1 flex gap-2">
         <Input
-          placeholder={placeholder}
+          placeholder={`${placeholder} (max ${MAX_NAME_LENGTH} caractères)`}
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleNameChange}
           onKeyPress={handleKeyPress}
           disabled={isDisabled}
+          maxLength={MAX_NAME_LENGTH}
           className="flex-1 bg-white/80 border-purple-200 placeholder:text-purple-900/50 text-purple-950 font-medium text-base lg:text-lg h-12 sm:h-14 rounded-lg focus:ring-2 focus:ring-purple-500/50"
         />
         <Button

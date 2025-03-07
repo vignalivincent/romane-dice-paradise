@@ -21,20 +21,19 @@ const adjectives = [
   "Malin", "Joueur", "Tendre", "Doux", "Espiègle"
 ];
 
+const truncateToMaxLength = (str: string, maxLength: number = 10): string => {
+  return str.length <= maxLength ? str : str.slice(0, maxLength);
+};
+
 export const generateBarbaName = (): string => {
   const randomBarba = barbaFamily[Math.floor(Math.random() * barbaFamily.length)];
   const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
   
-  // 50% chance to use either format
-  if (Math.random() > 0.5) {
-    return `${randomBarba.name} ${randomAdjective}`;
-  } else {
-    const prefix = randomBarba.name.startsWith("Barba") 
-      ? "Barba" 
-      : randomBarba.name.slice(0, 5);
-    
-    // Créer un nouveau suffixe en combinant des parties des mots
-    const suffix = randomAdjective.toLowerCase().slice(0, 4);
-    return `${prefix}${suffix}`;
-  }
+  // Format court uniquement pour garantir une longueur maximale de 10 caractères
+  const prefix = randomBarba.name.startsWith("Barba") 
+    ? "Barba" 
+    : randomBarba.name.slice(0, 5);
+  
+  const suffix = randomAdjective.toLowerCase().slice(0, 4);
+  return truncateToMaxLength(`${prefix}${suffix}`);
 }; 
