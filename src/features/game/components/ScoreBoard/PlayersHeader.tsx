@@ -19,10 +19,14 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({
   onToggleExpand,
 }) => {
   const shouldTruncate = players.length >= 5;
+  const shouldTruncateShort = players.length === 6;
   const totalScore = (player: Player) => Object.values(player.scores).reduce((sum, score) => sum + (score || 0), 0);
 
   const truncateName = (name: string): string => {
     if (!shouldTruncate) return name;
+    if (shouldTruncateShort) {
+      return name.length > 5 ? `${name.slice(0, 5)}.` : name;
+    }
     return name.length > 6 ? `${name.slice(0, 6)}.` : name;
   };
 
