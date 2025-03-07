@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { GameHistory, Player } from '@/types/game';
 
 interface RankingModalProps {
@@ -73,6 +73,9 @@ export const RankingModal: FC<RankingModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent fullWidth className="space-y-6">
+        <DialogTitle className="sr-only">
+          {t('ranking.title')}
+        </DialogTitle>
         <div className="text-center space-y-4">
           <div className="text-4xl">🏆</div>
           <h2 className="text-2xl font-bold text-purple-900">

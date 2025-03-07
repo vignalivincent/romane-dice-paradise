@@ -5,7 +5,7 @@ import { ScoreGrid } from './ScoreGrid';
 import { AdditionalScoreGrid } from './AdditionalScoreGrid';
 import { ModalHeader } from './ModalHeader';
 import { useScoreModal } from '../../hooks/useScoreModal';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 
 interface ScoreModalProps {
   isOpen: boolean;
@@ -36,6 +36,9 @@ export const ScoreModal: FC<ScoreModalProps> = (props) => {
   return (
     <Dialog open={props.isOpen} onOpenChange={props.onClose}>
       <DialogContent fullWidth className="space-y-6">
+        <DialogTitle className="sr-only">
+          Score pour {props.category.name} - {props.playerName}
+        </DialogTitle>
         <div className="space-y-6">
           <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-2 rounded-full shadow-lg border-2 border-white/30 font-bold text-lg text-center">
             {props.playerName}

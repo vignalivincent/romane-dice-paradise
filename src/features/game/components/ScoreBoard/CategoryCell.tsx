@@ -21,7 +21,7 @@ export const CategoryCell: FC<CategoryCellProps> = ({
   
   return (
     <div
-      className="relative transition-all duration-300 ease-in-out h-12"
+      className="relative transition-all duration-300 ease-in-out h-12 category-cell"
       style={style}
     >
       <div

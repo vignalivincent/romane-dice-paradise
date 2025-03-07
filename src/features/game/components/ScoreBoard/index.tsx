@@ -1,5 +1,5 @@
 // Scoreboard component - Updated for Vercel preview
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
 import { useVictory } from '../../hooks/useVictory';
@@ -44,6 +44,19 @@ export const ScoreBoard: FC = () => {
   const [confirmEndGameOpen, setConfirmEndGameOpen] = useState(false);
   const [rankingModalOpen, setRankingModalOpen] = useState(false);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.category-cell') && (focusedCategory || isBonusExpanded)) {
+        setFocusedCategory(null);
+        setIsBonusExpanded(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [focusedCategory, isBonusExpanded]);
+
   const {
     isVictoryModalOpen,
     winner,
@@ -59,6 +72,7 @@ export const ScoreBoard: FC = () => {
   const handleCategoryFocus = (category: ScoreCategoryUI) => {
     if (isExpanded) return;
     setFocusedCategory(focusedCategory?.id === category.id ? null : category);
+    setIsBonusExpanded(false);
   };
 
   const handleToggleExpand = () => {
@@ -91,7 +105,7 @@ export const ScoreBoard: FC = () => {
       toast({
         variant: "success",
         title: "🍾 Tu me fais rêver !",
-        description: `${player.name}, j'ai toujours cru en toi ! Rendez-vous au sommet`,
+        description: `${player.name}, j'ai toujours cru en toi ! Rendez-vous au sommet.`,
         className: "text-xl font-bold",
       });
     } else if (score === 0 && player) {
@@ -157,14 +171,17 @@ export const ScoreBoard: FC = () => {
             hideLabel
           />
 
-          <TotalRow
-            values={bonusValues}
-            players={players.length}
-            className={(value) => value > 0 ? 'bg-emerald-400/20 text-emerald-50' : 'bg-white/10 text-white/50'}
-            isBonus
-            isExpanded={isBonusExpanded || isExpanded}
-            onToggleExpand={handleToggleBonusExpand}
-          />
+          <div className="category-cell">
+            <TotalRow
+              values={bonusValues}
+              players={players.length}
+              className={(value) => value > 0 ? 'bg-emerald-400/20 text-emerald-50' : 'bg-white/10 text-white/50'}
+              isBonus
+              isExpanded={isExpanded}
+              isFocused={isBonusExpanded}
+              onToggleExpand={handleToggleBonusExpand}
+            />
+          </div>
         </div>
 
         {/* Section inférieure */}
@@ -190,7 +207,7 @@ export const ScoreBoard: FC = () => {
       <div className="flex gap-3">
         <button
           onClick={handleEndGameClick}
-          className="flex-1 bg-red-500/90 hover:bg-red-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl"
+          className="flex-1 bg-red-500/90 hover:bg-red-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
         >
           {t('game.actions.end')} 🏁
         </button>
@@ -198,9 +215,9 @@ export const ScoreBoard: FC = () => {
         {hasGameHistory() && (
           <button
             onClick={() => setRankingModalOpen(true)}
-            className="flex-1 bg-purple-500/90 hover:bg-purple-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl"
+            className="w-12 sm:w-14 bg-purple-500/90 hover:bg-purple-500 text-white font-semibold h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
           >
-            {t('game.actions.ranking')} 🏆
+            🏆
           </button>
         )}
       </div>
