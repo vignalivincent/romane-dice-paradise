@@ -19,7 +19,6 @@ export const useScoreModal = ({
   category,
 }: UseScoreModalProps) => {
   const [chanceValue, setChanceValue] = useState<string>('');
-  const [additionalScore, setAdditionalScore] = useState<number | null>(null);
   const [baseScore, setBaseScore] = useState<number | null>(null);
 
   useEffect(() => {
@@ -36,7 +35,6 @@ export const useScoreModal = ({
   useEffect(() => {
     if (isOpen) {
       setChanceValue('');
-      setAdditionalScore(null);
       setBaseScore(null);
     }
   }, [isOpen]);

@@ -25,7 +25,6 @@ export const ScoreBoard: FC = () => {
     updatePlayerScore,
     endGame,
     calculateSectionTotal,
-    calculateTotal,
     getUpperBonus,
     getLeadingPlayer,
     getMaxScore,
