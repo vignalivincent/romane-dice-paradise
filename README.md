@@ -1,6 +1,48 @@
-# 🎲 Romane Dice Paradise
+# Romane Dice Paradise 🎲
 
-Un jeu de dés moderne et élégant, inspiré du Yahtzee, développé avec React et TypeScript.
+[![Vercel Production Deployment](https://img.shields.io/badge/vercel-production-blue)](https://romane-dice-paradise.vercel.app)
+[![GitHub Actions CI](https://github.com/vignalivincent/romane-dice-paradise/actions/workflows/ci.yml/badge.svg)](https://github.com/vignalivincent/romane-dice-paradise/actions/workflows/ci.yml)
+
+Un jeu de dés enchantés pour Romane 🌟
+
+## Environnements
+
+- **Production** : [romane-dice-paradise.vercel.app](https://romane-dice-paradise.vercel.app)
+- **Preview** : Déployé automatiquement pour chaque branche
+
+## Développement
+
+```bash
+# Installation
+yarn install
+
+# Développement
+yarn dev
+
+# Build
+yarn build
+
+# Lint et format
+yarn lint
+yarn format
+```
+
+## Workflow Git
+
+1. Créer une branche de feature : `git checkout -b feat/ma-feature`
+2. Commiter avec la convention : `✨ feat(scope): description`
+3. Pousser et créer une PR
+4. La preview sera automatiquement déployée sur Vercel
+5. Merger une fois les checks passés
+
+## Emojis de commit
+
+- ✨ `sparkles` : Nouvelle fonctionnalité (feat)
+- 🐛 `bug` : Correction de bug (fix)
+- 📝 `memo` : Documentation (docs)
+- ♻️ `recycle` : Refactoring (refactor)
+- ✅ `check` : Tests (test)
+- 🔧 `wrench` : Configuration (chore)
 
 ## 🚀 Fonctionnalités
 
