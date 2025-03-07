@@ -18,7 +18,7 @@ export const TotalRow: FC<TotalRowProps> = ({
   hideLabel = false
 }) => {
   return (
-    <div className="grid gap-x-4" style={{ gridTemplateColumns: `${shouldCollapse ? '60px' : '100px'} minmax(0, 1fr)` }}>
+    <div className="grid gap-x-1" style={{ gridTemplateColumns: `${shouldCollapse ? '60px' : '100px'} minmax(0, 1fr)` }}>
       {!hideLabel && label && (
         <div className="font-bold text-white/90 text-sm text-center">
           {label}

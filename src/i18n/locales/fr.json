@@ -128,10 +128,11 @@
   },
   "victory": {
     "title": "Félicitations !",
-    "winner": "Victoire de {name} !",
-    "scores": "Scores finaux",
+    "winner": "remporte la victoire",
+    "points": "pts",
+    "scores": "Scores finaux :",
     "actions": {
-      "newGame": "Nouvelle partie",
+      "newGame": "Rejouez",
       "close": "Fermer"
     }
   },

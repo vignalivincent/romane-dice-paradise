@@ -23,16 +23,29 @@ export const AdditionalScoreGrid: FC<AdditionalScoreGridProps> = ({
     <div className="space-y-6">
       <div className="text-center space-y-2">
         <div className="text-lg font-semibold text-purple-900">
-          {t('scoreModal.additionalScore.title')}
-        </div>
-        <div className="text-2xl font-bold text-purple-900">
-          {t('scoreModal.additionalScore.base', { score: baseScore })}
-        </div>
-        <div className="text-lg font-semibold text-purple-900">
-          {t(`scoreModal.additionalScore.${category}.title`)}
-        </div>
-        <div className="text-sm text-purple-800">
-          {t(`scoreModal.additionalScore.${category}.description`)}
+          {category === 'threeOfAKind' || category === 'fourOfAKind' ? (
+            <>
+              <div className="text-lg font-semibold text-purple-900">
+                {t(`scoreModal.additionalScore.${category}.title`)}
+              </div>
+              <div className="text-sm text-purple-800">
+                {t(`scoreModal.additionalScore.${category}.description`)}
+              </div>
+            </>
+          ) : (
+            <>
+              {t('scoreModal.additionalScore.title')}
+              <div className="text-2xl font-bold text-purple-900">
+                {t('scoreModal.additionalScore.base', { score: baseScore })}
+              </div>
+              <div className="text-lg font-semibold text-purple-900">
+                {t(`scoreModal.additionalScore.${category}.title`)}
+              </div>
+              <div className="text-sm text-purple-800">
+                {t(`scoreModal.additionalScore.${category}.description`)}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -47,13 +60,6 @@ export const AdditionalScoreGrid: FC<AdditionalScoreGridProps> = ({
           </button>
         ))}
       </div>
-
-      <button
-        onClick={onCancel}
-        className="w-full bg-red-100 hover:bg-red-200 text-red-900 font-bold py-4 rounded-xl transition-colors text-xl shadow-sm hover:shadow-md"
-      >
-        {t('scoreModal.common.back')}
-      </button>
     </div>
   );
 }; 

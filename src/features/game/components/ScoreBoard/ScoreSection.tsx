@@ -18,7 +18,7 @@ export const ScoreSection: FC<ScoreSectionProps> = ({
   const shouldCollapse = players.length > 4;
 
   return (
-    <div className="grid gap-x-4 gap-y-1.5" style={{ gridTemplateColumns: `${shouldCollapse ? '60px' : '100px'} minmax(0, 1fr)` }}>
+    <div className="grid gap-x-1" style={{ gridTemplateColumns: `${shouldCollapse ? '60px' : '100px'} minmax(0, 1fr)` }}>
       {/* Catégories */}
       <div className="space-y-1.5">
         {categories.map((category) => (
