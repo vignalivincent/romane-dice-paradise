@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface VictoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  winner: {
+  winner?: {
     name: string;
     score: number;
   };
@@ -22,27 +23,26 @@ export const VictoryModal: FC<VictoryModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  if (!isOpen) return null;
+  // Si pas de gagnant, on prend le joueur avec le plus haut score
+  const actualWinner = winner || players.reduce((prev, current) => 
+    (current.score > prev.score) ? current : prev
+  , players[0]);
+
+  if (!actualWinner) return null;
 
   return (
-    <div 
-      className="fixed inset-0 flex h-screen w-screen items-center justify-center p-4 z-50 backdrop-blur-sm bg-black/30"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-lg p-6 space-y-6 transform transition-all relative border border-white/20"
-        onClick={e => e.stopPropagation()}
-      >
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent fullWidth className="space-y-6">
         <div className="text-center space-y-4">
           <div className="text-6xl animate-bounce">🏆</div>
           <h2 className="text-3xl font-bold text-purple-900">
             {t('victory.congratulations')}
           </h2>
           <p className="text-xl text-purple-600">
-            {winner.name} {t('victory.wins')} !
+            {actualWinner.name} {t('victory.wins')} !
           </p>
           <p className="text-2xl font-bold text-purple-900">
-            {winner.score} {t('victory.points')}
+            {actualWinner.score} {t('victory.points')}
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export const VictoryModal: FC<VictoryModalProps> = ({
         >
           {t('victory.newGame')}
         </button>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }; 

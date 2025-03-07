@@ -5,7 +5,9 @@
   },
   "common": {
     "cancel": "Annuler",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "close": "Fermer"
   },
   "players": {
     "input": {
@@ -17,7 +19,7 @@
     },
     "status": {
       "active": "En cours",
-      "empty": "✨ Ajoutez des joueurs pour commencer",
+      "empty": "Ajoutez des joueurs pour commencer",
       "maxPlayers": "Maximum 6 joueurs"
     }
   },
@@ -31,19 +33,21 @@
     "actions": {
       "end": "Terminer la partie",
       "start": "Démarrer",
-      "newGame": "Nouvelle partie"
+      "new": "Nouvelle partie",
+      "ranking": "Classement"
     },
     "endGame": {
       "title": "Terminer la partie ?",
-      "description": "Cette action mettra fin à la partie en cours et réinitialisera tous les scores. Cette action est irréversible."
+      "description": "Cette action est irréversible. Vous ne pourrez plus modifier les scores une fois la partie terminée."
     }
   },
-  "victory": {
-    "congratulations": "Félicitations !",
-    "wins": "remporte la partie",
-    "points": "points",
-    "finalScores": "Scores finaux",
-    "newGame": "Nouvelle partie"
+  "playerInput": {
+    "placeholder": "Nom du joueur",
+    "actions": {
+      "add": "Ajouter",
+      "remove": "Retirer"
+    },
+    "emptyPlayers": "👋 Ajoutez des joueurs pour commencer !"
   },
   "scoreModal": {
     "chance": {
@@ -52,7 +56,8 @@
       "validate": "Valider"
     },
     "common": {
-      "cancel": "Barrer (0)"
+      "cancel": "Barrer",
+      "back": "Retour"
     },
     "categories": {
       "ones": {
@@ -107,6 +112,33 @@
         "name": "Chance",
         "description": "Total de tous les dés"
       }
+    },
+    "additionalScore": {
+      "title": "Score additionnel",
+      "base": "Score de base : {score}",
+      "threeOfAKind": {
+        "title": "Valeur des dés restants",
+        "description": "Additionnez la valeur des 2 dés non utilisés dans le brelan"
+      },
+      "fourOfAKind": {
+        "title": "Valeur du dé restant",
+        "description": "Ajoutez la valeur du dé non utilisé dans le carré"
+      }
     }
+  },
+  "victory": {
+    "title": "Félicitations !",
+    "winner": "Victoire de {name} !",
+    "scores": "Scores finaux",
+    "actions": {
+      "newGame": "Nouvelle partie",
+      "close": "Fermer"
+    }
+  },
+  "ranking": {
+    "title": "Classement des joueurs",
+    "victories": "victoires",
+    "gamesPlayed": "Parties jouées",
+    "averageScore": "Score moyen"
   }
 } 

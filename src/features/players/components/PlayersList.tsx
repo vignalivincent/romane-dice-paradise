@@ -9,11 +9,20 @@ export const PlayersList: FC = () => {
   const { t } = useTranslation();
   const { players, addPlayer, removePlayer, isStarted } = useGameStore();
 
+  const handleAddPlayer = (name: string): boolean => {
+    const playerExists = players.some(player => player.name.toLowerCase() === name.toLowerCase());
+    if (playerExists) {
+      return false;
+    }
+    addPlayer(name);
+    return true;
+  };
+
   return (
     <div className="flex flex-col h-full gap-8">
       <div className="flex flex-col gap-4">
         <AddPlayerForm
-          onAdd={addPlayer}
+          onAdd={handleAddPlayer}
           disabled={isStarted}
           placeholder={t('players.input.placeholder')}
           addLabel={t('players.actions.add')}
@@ -32,7 +41,7 @@ export const PlayersList: FC = () => {
 
           {players.length === 0 && (
             <div className="flex items-center justify-center h-[40vh] lg:h-[50vh]">
-              <InfoMessage withSparkles>
+              <InfoMessage>
                 {t('players.status.empty')}
               </InfoMessage>
             </div>

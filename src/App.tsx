@@ -2,10 +2,10 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlayersList } from '@/features/players/components/PlayersList';
 import { GameControls } from '@/features/game/components/GameControls';
-
+import { ScoreBoard } from '@/features/game/components/ScoreBoard';
+import { Toaster } from '@/components/ui/toaster';
 import { useGameStore } from '@/features/game/store/gameStore';
 import '@/i18n';
-import { ScoreBoard } from './features/game/components/ScoreBoard';
 
 const App: FC = () => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ const App: FC = () => {
         <div className="mx-auto w-full max-w-5xl flex flex-col flex-1">
           <div className="text-center mb-6 md:mb-8">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] tracking-tight">
-              ✨ {t('app.title')} 🎲
+              🎲 {t('app.title')} 🎲
             </h1>
             <p className="text-white/90 text-sm sm:text-base lg:text-lg font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic">
               {t('app.subtitle')} ✨
@@ -41,6 +41,7 @@ const App: FC = () => {
           )}
         </div>
       </main>
+      <Toaster />
     </div>
   );
 };

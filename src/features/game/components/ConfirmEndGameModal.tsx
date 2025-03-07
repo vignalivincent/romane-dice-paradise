@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 interface ConfirmEndGameModalProps {
   isOpen: boolean;
@@ -14,17 +15,9 @@ export const ConfirmEndGameModal: FC<ConfirmEndGameModalProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  if (!isOpen) return null;
-
   return (
-    <div 
-      className="fixed inset-0 flex h-screen w-screen items-center justify-center p-4 z-50 backdrop-blur-sm bg-black/30"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-md p-6 space-y-6 transform transition-all relative border border-white/20"
-        onClick={e => e.stopPropagation()}
-      >
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent fullWidth className="space-y-6">
         <div className="text-center space-y-4">
           <div className="text-6xl">⚠️</div>
           <h2 className="text-2xl font-bold text-red-600">
@@ -49,7 +42,7 @@ export const ConfirmEndGameModal: FC<ConfirmEndGameModalProps> = ({
             {t('common.confirm')}
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }; 
