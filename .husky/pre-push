@@ -1,1 +1,15 @@
- 
+#!/usr/bin/env sh
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+PROTECTED_BRANCH="master"
+
+if [ "$BRANCH" = "$PROTECTED_BRANCH" ]; then
+  echo "🚫 Push direct sur la branche $PROTECTED_BRANCH interdite!"
+  echo "✨ Veuillez suivre le workflow suivant :"
+  echo "  1. Créer une branche de feature : git checkout -b feature/ma-feature"
+  echo "  2. Pousser sur cette branche   : git push origin feature/ma-feature"
+  echo "  3. Créer une Pull Request sur GitHub"
+  exit 1
+fi
+
+exit 0

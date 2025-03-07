@@ -1,1 +1,24 @@
- 
+#!/usr/bin/env sh
+
+commit_msg_file="$1"
+commit_msg=$(cat "$commit_msg_file")
+
+commit_pattern="^(✨|🐛|📝|♻️|✅|🔧)\s(feat|fix|docs|style|refactor|test|chore)(\([a-z-]+\))?:\s.+$"
+
+if ! echo "$commit_msg" | grep -E "$commit_pattern" > /dev/null; then
+  echo "🚫 Format de commit invalide !"
+  echo "✨ Le message doit suivre le format : [emoji] type(scope): description"
+  echo ""
+  echo "Emojis autorisés :"
+  echo "✨ sparkles : Nouvelle fonctionnalité (feat)"
+  echo "🐛 bug     : Correction de bug (fix)"
+  echo "📝 memo    : Documentation (docs)"
+  echo "♻️  recycle : Refactoring (refactor)"
+  echo "✅ check   : Tests (test)"
+  echo "🔧 wrench  : Configuration/Maintenance (chore)"
+  echo ""
+  echo "Exemple : ✨ feat(auth): add login page"
+  exit 1
+fi
+
+exit 0
