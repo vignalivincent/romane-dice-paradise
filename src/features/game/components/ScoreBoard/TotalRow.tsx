@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { cn } from '@/lib/utils';
 import { CategoryCell } from './CategoryCell';
 import { ScoreCategoryUI } from '../../constants/categories';
 import { ScoreCategory } from '@/types/game';

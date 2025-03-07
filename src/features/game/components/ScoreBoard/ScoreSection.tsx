@@ -3,7 +3,6 @@ import { Player } from '@/types/game';
 import { ScoreCategoryUI } from '../../constants/categories';
 import { CategoryCell } from './CategoryCell';
 import { ScoreCell } from './ScoreCell';
-import { cn } from '@/lib/utils';
 
 interface ScoreSectionProps {
   categories: ScoreCategoryUI[];
