@@ -10,10 +10,12 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md,json}\"",
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rm -rf dist node_modules",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "ci": "yarn type-check && yarn lint && yarn format:check && yarn build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
