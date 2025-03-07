@@ -132,7 +132,7 @@ export const ScoreBoard: FC = () => {
           />
 
           <TotalRow
-            label="Bonus (≥ 62)"
+            label="(≥62)"
             values={bonusValues}
             players={players.length}
             shouldCollapse={players.length > 4}
@@ -161,7 +161,7 @@ export const ScoreBoard: FC = () => {
       <div className="flex gap-3">
         <button
           onClick={handleEndGameClick}
-          className="flex-1 bg-red-500/90 hover:bg-red-500 text-white font-semibold text-base lg:text-lg h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl"
+          className="flex-1 bg-red-500/90 hover:bg-red-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl"
         >
           {t('game.actions.end')} 🏁
         </button>
@@ -169,7 +169,7 @@ export const ScoreBoard: FC = () => {
         {hasGameHistory() && (
           <button
             onClick={() => setRankingModalOpen(true)}
-            className="flex-1 bg-purple-500/90 hover:bg-purple-500 text-white font-semibold text-base lg:text-lg h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl"
+            className="flex-1 bg-purple-500/90 hover:bg-purple-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl"
           >
             {t('game.actions.ranking')} 🏆
           </button>

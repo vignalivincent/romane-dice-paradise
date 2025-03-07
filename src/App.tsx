@@ -15,11 +15,13 @@ const App: FC = () => {
     <div className="min-h-screen w-screen overflow-x-hidden flex flex-col bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400">
       <main className="flex-1 flex flex-col w-full p-4 sm:p-6 md:p-8">
         <div className="mx-auto w-full max-w-5xl flex flex-col flex-1">
-          <div className="text-center mb-6 md:mb-8">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] tracking-tight">
-              🎲 {t('app.title')} 🎲
+          <div className="flex flex-col items-center justify-center mb-6 md:mb-8">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] tracking-tight text-center flex items-center justify-center gap-4">
+              <span>🎲</span>
+              <span>{t('app.title')}</span>
+              <span>🎲</span>
             </h1>
-            <p className="text-white/90 text-sm sm:text-base lg:text-lg font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic">
+            <p className="text-white/90 text-sm sm:text-base lg:text-lg font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic text-center">
               {t('app.subtitle')} ✨
             </p>
           </div>

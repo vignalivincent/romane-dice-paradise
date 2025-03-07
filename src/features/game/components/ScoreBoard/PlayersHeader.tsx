@@ -15,18 +15,24 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({
   leadingPlayerId,
 }) => {
   const shouldCollapse = players.length > 4;
+  const shouldTruncate = players.length >= 6;
   const totalScore = (player: Player) => Object.values(player.scores).reduce((sum, score) => sum + (score || 0), 0);
 
+  const truncateName = (name: string): string => {
+    if (!shouldTruncate) return name;
+    return name.length > 7 ? `${name.slice(0, 7)}.` : name;
+  };
+
   return (
-    <div className="grid" style={{ gridTemplateColumns: `${shouldCollapse ? '100px' : '160px'} minmax(0, 1fr)` }}>
+    <div className="grid" style={{ gridTemplateColumns: `${shouldCollapse ? '60px' : '100px'} minmax(0, 1fr)` }}>
       <div /> {/* Espace pour aligner avec les catégories */}
-      <div className="grid gap-x-1" style={{ gridTemplateColumns: `repeat(${players.length}, 1fr)` }}>
+      <div className="grid gap-x-1 w-full" style={{ gridTemplateColumns: `repeat(${players.length}, 1fr)` }}>
         {players.map((player) => {
           const isLeading = player.id === leadingPlayerId;
           const isCurrentPlayer = player.id === currentPlayerId;
 
           return (
-            <div key={player.id} className="relative">
+            <div key={player.id} className="relative min-w-0">
               <div className={`
                 flex flex-col items-center justify-center 
                 ${shouldCollapse ? 'h-14 py-1.5' : 'h-16 py-2'} 
@@ -39,15 +45,15 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({
                   </div>
                 )}
                 <div className={cn(
-                  "font-semibold text-center w-full break-words leading-tight",
-                  shouldCollapse ? "text-xs mt-5" : "text-sm mt-6",
+                  "font-semibold text-center w-full px-1 leading-tight",
+                  shouldCollapse ? "text-[10px] mt-4" : "text-xs mt-5",
                   isCurrentPlayer ? "text-purple-900" : "text-purple-700"
                 )}>
-                  {player.name}
+                  {truncateName(player.name)}
                 </div>
                 <div className={cn(
-                  "font-medium mt-0.5",
-                  shouldCollapse ? "text-xs" : "text-sm",
+                  "font-medium mt-0.5 w-full text-center px-1",
+                  shouldCollapse ? "text-[10px]" : "text-xs",
                   isCurrentPlayer ? "text-purple-800" : "text-purple-600"
                 )}>
                   {totalScore(player)} pts

@@ -18,32 +18,30 @@ export const ScoreSection: FC<ScoreSectionProps> = ({
   const shouldCollapse = players.length > 4;
 
   return (
-    <div className="grid gap-x-4 gap-y-1.5" style={{ gridTemplateColumns: `${shouldCollapse ? '100px' : '160px'} minmax(0, 1fr)` }}>
-      {/* Colonne des catégories */}
+    <div className="grid gap-x-4 gap-y-1.5" style={{ gridTemplateColumns: `${shouldCollapse ? '60px' : '100px'} minmax(0, 1fr)` }}>
+      {/* Catégories */}
       <div className="space-y-1.5">
-        {categories.map(category => (
-          <div key={category.id}>
-            <CategoryCell 
-              category={category} 
-              shouldCollapse={shouldCollapse}
-            />
-          </div>
+        {categories.map((category) => (
+          <CategoryCell
+            key={category.id}
+            category={category}
+            shouldCollapse={shouldCollapse}
+          />
         ))}
       </div>
 
-      {/* Grille des scores */}
-      <div className="space-y-1.5">
-        {categories.map(category => (
-          <div key={category.id} className="grid gap-x-1" style={{ gridTemplateColumns: `repeat(${players.length}, 1fr)` }}>
-            {players.map(player => (
-              <div key={`${category.id}-${player.id}`}>
-                <ScoreCell
-                  category={category}
-                  player={player}
-                  onSelect={onSelect}
-                  shouldCollapse={shouldCollapse}
-                />
-              </div>
+      {/* Scores */}
+      <div className="grid gap-x-1 w-full" style={{ gridTemplateColumns: `repeat(${players.length}, 1fr)` }}>
+        {players.map((player) => (
+          <div key={player.id} className="space-y-1.5 min-w-0">
+            {categories.map((category) => (
+              <ScoreCell
+                key={category.id}
+                player={player}
+                category={category}
+                onSelect={onSelect}
+                shouldCollapse={shouldCollapse}
+              />
             ))}
           </div>
         ))}
