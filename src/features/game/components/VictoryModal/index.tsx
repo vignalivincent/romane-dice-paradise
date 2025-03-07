@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 
 interface VictoryModalProps {
   isOpen: boolean;
@@ -33,6 +33,9 @@ export const VictoryModal: FC<VictoryModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent fullWidth className="space-y-6">
+        <DialogTitle className="sr-only">
+          {t('victory.title')} - {actualWinner.name}
+        </DialogTitle>
         <div className="text-center space-y-4">
           <div className="text-6xl animate-bounce">🏆</div>
           <h2 className="text-3xl font-bold text-purple-900">

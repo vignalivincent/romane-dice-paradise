@@ -11,6 +11,7 @@ interface TotalRowProps {
   hideLabel?: boolean;
   isBonus?: boolean;
   isExpanded?: boolean;
+  isFocused?: boolean;
   onToggleExpand?: () => void;
 }
 
@@ -22,6 +23,7 @@ export const TotalRow: FC<TotalRowProps> = ({
   hideLabel = false,
   isBonus = false,
   isExpanded = false,
+  isFocused = false,
   onToggleExpand
 }) => {
   if (isBonus) {
@@ -39,7 +41,7 @@ export const TotalRow: FC<TotalRowProps> = ({
         <CategoryCell
           category={bonusCategory}
           isExpanded={isExpanded}
-          isFocused={false}
+          isFocused={isFocused}
           onFocus={onToggleExpand}
         />
         <div className="grid gap-x-1" style={{ gridTemplateColumns: `repeat(${players}, 1fr)` }}>
