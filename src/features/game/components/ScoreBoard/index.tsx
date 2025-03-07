@@ -13,6 +13,7 @@ import { ScoreSection } from './ScoreSection';
 import { TotalRow } from './TotalRow';
 import { SCORE_CATEGORIES } from '../../constants/categories';
 import { useToast } from '@/components/ui/use-toast';
+import { ScoreCategoryUI } from '../../constants/categories';
 
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
@@ -35,6 +36,10 @@ export const ScoreBoard: FC = () => {
     category: ScoreCategory;
   } | null>(null);
 
+  const [focusedCategory, setFocusedCategory] = useState<ScoreCategoryUI | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isBonusExpanded, setIsBonusExpanded] = useState(false);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmEndGameOpen, setConfirmEndGameOpen] = useState(false);
   const [rankingModalOpen, setRankingModalOpen] = useState(false);
@@ -50,6 +55,23 @@ export const ScoreBoard: FC = () => {
   });
 
   if (!isStarted || players.length === 0) return null;
+
+  const handleCategoryFocus = (category: ScoreCategoryUI) => {
+    if (isExpanded) return;
+    setFocusedCategory(focusedCategory?.id === category.id ? null : category);
+  };
+
+  const handleToggleExpand = () => {
+    setIsExpanded(!isExpanded);
+    setFocusedCategory(null);
+    setIsBonusExpanded(false);
+  };
+
+  const handleToggleBonusExpand = () => {
+    if (isExpanded) return;
+    setIsBonusExpanded(!isBonusExpanded);
+    setFocusedCategory(null);
+  };
 
   const handleCellClick = (playerId: string, category: ScoreCategory) => {
     if (!isStarted) return;
@@ -114,6 +136,8 @@ export const ScoreBoard: FC = () => {
           players={players} 
           leadingPlayerId={leadingPlayer?.id || null}
           currentPlayerId={null}
+          isExpanded={isExpanded}
+          onToggleExpand={handleToggleExpand}
         />
 
         {/* Section supérieure */}
@@ -122,21 +146,24 @@ export const ScoreBoard: FC = () => {
             categories={upperCategories}
             players={players}
             onSelect={handleCellClick}
+            focusedCategory={focusedCategory}
+            onCategoryFocus={handleCategoryFocus}
+            isExpanded={isExpanded}
           />
 
           <TotalRow
             values={upperTotals}
             players={players.length}
-            shouldCollapse={players.length > 4}
             hideLabel
           />
 
           <TotalRow
-            label="(≥62)"
             values={bonusValues}
             players={players.length}
-            shouldCollapse={players.length > 4}
             className={(value) => value > 0 ? 'bg-emerald-400/20 text-emerald-50' : 'bg-white/10 text-white/50'}
+            isBonus
+            isExpanded={isBonusExpanded || isExpanded}
+            onToggleExpand={handleToggleBonusExpand}
           />
         </div>
 
@@ -146,12 +173,14 @@ export const ScoreBoard: FC = () => {
             categories={lowerCategories}
             players={players}
             onSelect={handleCellClick}
+            focusedCategory={focusedCategory}
+            onCategoryFocus={handleCategoryFocus}
+            isExpanded={isExpanded}
           />
 
           <TotalRow
             values={lowerTotals}
             players={players.length}
-            shouldCollapse={players.length > 4}
             hideLabel
           />
         </div>
@@ -181,6 +210,7 @@ export const ScoreBoard: FC = () => {
         onClose={handleModalClose}
         onSelect={handleScoreSelect}
         category={selectedCell ? SCORE_CATEGORIES.find(c => c.id === selectedCell.category)! : SCORE_CATEGORIES[0]}
+        playerName={selectedCell ? players.find(p => p.id === selectedCell.playerId)?.name || '' : ''}
       />
 
       <VictoryModal

@@ -16,6 +16,7 @@ interface ScoreModalProps {
     name: string;
     description: string;
   };
+  playerName: string;
 }
 
 export const ScoreModal: FC<ScoreModalProps> = (props) => {
@@ -35,11 +36,16 @@ export const ScoreModal: FC<ScoreModalProps> = (props) => {
   return (
     <Dialog open={props.isOpen} onOpenChange={props.onClose}>
       <DialogContent fullWidth className="space-y-6">
-        <ModalHeader
-          title={props.category.name}
-          description={props.category.description}
-          onClose={props.onClose}
-        />
+        <div className="space-y-6">
+          <div className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-2 rounded-full shadow-lg border-2 border-white/30 font-bold text-lg text-center">
+            {props.playerName}
+          </div>
+          <ModalHeader
+            title={props.category.name}
+            description={props.category.description}
+            onClose={props.onClose}
+          />
+        </div>
 
         {props.category.id === 'chance' ? (
           <ChanceInput
