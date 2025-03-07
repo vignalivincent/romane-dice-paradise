@@ -1,0 +1,18 @@
+{
+  "framework": "vite",
+  "buildCommand": "yarn build",
+  "devCommand": "yarn dev",
+  "outputDirectory": "dist",
+  "installCommand": "yarn install",
+  "git": {
+    "deploymentEnabled": {
+      "master": true,
+      "feat/*": true,
+      "feature/*": true
+    }
+  },
+  "github": {
+    "enabled": true,
+    "silent": true
+  }
+} 
