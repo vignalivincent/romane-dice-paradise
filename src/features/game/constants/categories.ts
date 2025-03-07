@@ -11,7 +11,7 @@ export interface ScoreCategoryUI {
 
 export const SCORE_CATEGORIES: ScoreCategoryUI[] = [
   // Section supérieure
-  { id: 'ones', name: 'As', description: 'Total des 1', section: 'upper', icon: '1️⃣', color: 'from-blue-400/10 to-blue-500/10' },
+  { id: 'ones', name: 'Aa', description: 'Total des 1', section: 'upper', icon: '1️⃣', color: 'from-blue-400/10 to-blue-500/10' },
   { id: 'twos', name: 'Deux', description: 'Total des 2', section: 'upper', icon: '2️⃣', color: 'from-blue-400/10 to-blue-500/10' },
   { id: 'threes', name: 'Trois', description: 'Total des 3', section: 'upper', icon: '3️⃣', color: 'from-blue-400/10 to-blue-500/10' },
   { id: 'fours', name: 'Quatre', description: 'Total des 4', section: 'upper', icon: '4️⃣', color: 'from-blue-400/10 to-blue-500/10' },

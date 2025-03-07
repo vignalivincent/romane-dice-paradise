@@ -32,15 +32,6 @@ const saveState = (state: GameState) => {
   }
 };
 
-interface ScoreCategoryUI {
-  id: ScoreCategory;
-  name: string;
-  description: string;
-  section: 'upper' | 'lower';
-  icon: string;
-  color: string;
-}
-
 interface GameStore extends GameState {
   // Getters
   getMaxScore: (category: ScoreCategory) => number;
@@ -231,7 +222,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }),
 
   endGame: () =>
-    set((state) => {
+    set(() => {
       const newState = {
         isStarted: false,
         players: [],

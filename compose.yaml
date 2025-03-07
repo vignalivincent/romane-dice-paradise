@@ -1,0 +1,28 @@
+services:
+  app:
+    build:
+      context: .
+      target: deps
+      dockerfile: Dockerfile
+    command: sh -c "chown -R node:node /app/node_modules/.vite && yarn dev"
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - vite-cache:/app/node_modules/.vite
+    environment:
+      - NODE_ENV=development
+      - VITE_HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+    user: "node"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    init: true
+
+volumes:
+  vite-cache:
+    driver: local 

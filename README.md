@@ -1,54 +1,114 @@
-# React + TypeScript + Vite
+# 🎲 Romane Dice Paradise
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Un jeu de dés moderne et élégant, inspiré du Yahtzee, développé avec React et TypeScript.
 
-Currently, two official plugins are available:
+## 🚀 Fonctionnalités
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Interface utilisateur moderne et responsive
+- Support multilingue (Français)
+- Gestion des scores en temps réel
+- Jusqu'à 6 joueurs
+- Système de bonus et de totaux automatiques
+- Mode sombre/clair
 
-## Expanding the ESLint configuration
+## 🛠️ Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Zustand
+- i18next
+- Radix UI
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📦 Installation
+
+```bash
+# Cloner le projet
+git clone [url-du-repo]
+
+# Installer les dépendances
+yarn install
+
+# Lancer en développement
+yarn dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🔧 Scripts disponibles
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `yarn dev` - Lance le serveur de développement
+- `yarn build` - Crée une version de production
+- `yarn preview` - Prévisualise la version de production
+- `yarn lint` - Vérifie le code avec ESLint
+- `yarn lint:fix` - Corrige automatiquement les erreurs de linting
+- `yarn format` - Formate le code avec Prettier
+- `yarn type-check` - Vérifie les types TypeScript
+- `yarn clean` - Nettoie les dossiers de build
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! Assurez-vous de :
+
+1. Fork le projet
+2. Créer une branche pour votre fonctionnalité
+3. Commiter vos changements (suivre la convention [Conventional Commits](https://www.conventionalcommits.org/))
+4. Pousser vers la branche
+5. Ouvrir une Pull Request
+
+## 📝 Convention de Commit
+
+Ce projet suit la convention [Conventional Commits](https://www.conventionalcommits.org/). Les messages de commit doivent suivre le format :
+
+```
+type(scope): description
+
+[corps]
+
+[footer]
+```
+
+Types disponibles :
+- `feat` : Nouvelle fonctionnalité
+- `fix` : Correction de bug
+- `docs` : Documentation
+- `style` : Formatage
+- `refactor` : Refactoring
+- `perf` : Optimisation
+- `test` : Tests
+- `build` : Build
+- `ci` : CI
+- `chore` : Tâches diverses
+- `revert` : Annulation
+
+## 📄 Licence
+
+MIT
+
+## 🐳 Docker
+
+### Développement
+
+Pour lancer l'application en mode développement avec Docker :
+
+```bash
+# Construire et démarrer le conteneur
+docker compose up -d
+
+# Voir les logs
+docker compose logs -f
+
+# Arrêter le conteneur
+docker compose down
+```
+
+### Production
+
+Pour construire et lancer l'application en production :
+
+```bash
+# Construire l'image
+docker build -t romane-dice-paradise .
+
+# Lancer le conteneur
+docker run -d -p 80:80 romane-dice-paradise
 ```
