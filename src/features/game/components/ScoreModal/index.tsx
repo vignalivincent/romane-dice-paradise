@@ -58,7 +58,6 @@ export const ScoreModal: FC<ScoreModalProps> = (props) => {
           <AdditionalScoreGrid
             scores={additionalScores}
             onSelect={handleAdditionalScoreSelect}
-            onCancel={() => handleBarrer()}
             baseScore={baseScore!}
             category={props.category.id}
           />

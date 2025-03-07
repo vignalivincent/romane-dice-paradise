@@ -5,7 +5,6 @@ import { ScoreCategory } from '@/types/game';
 interface AdditionalScoreGridProps {
   scores: number[];
   onSelect: (score: number) => void;
-  onCancel: () => void;
   baseScore: number;
   category: ScoreCategory;
 }
@@ -13,7 +12,6 @@ interface AdditionalScoreGridProps {
 export const AdditionalScoreGrid: FC<AdditionalScoreGridProps> = ({
   scores,
   onSelect,
-  onCancel,
   baseScore,
   category,
 }) => {
