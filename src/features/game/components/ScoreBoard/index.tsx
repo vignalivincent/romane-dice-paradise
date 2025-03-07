@@ -1,3 +1,4 @@
+// Scoreboard component - Updated for Vercel preview
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
