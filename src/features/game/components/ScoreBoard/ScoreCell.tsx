@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useGameStore } from '../../store/gameStore';
+import { useScoreCalculations } from '../../store/gameStore';
 import { ScoreCategoryUI } from '../../constants/categories';
 import { Player } from '@/types/game';
 
@@ -12,7 +12,7 @@ interface ScoreCellProps {
 }
 
 export const ScoreCell: FC<ScoreCellProps> = ({ category, player, onSelect, shouldCollapse = false, isGameEnded = false }) => {
-  const { getMaxScore, getScoreStyle } = useGameStore();
+  const { getMaxScore, getScoreStyle } = useScoreCalculations();
   const score = player.scores[category.id];
   const maxScore = getMaxScore(category.id);
 
