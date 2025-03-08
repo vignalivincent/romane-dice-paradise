@@ -49,7 +49,7 @@ export const usePlayerActions = () =>
     useShallow((state) => ({
       addPlayer: state.addPlayer,
       removePlayer: state.removePlayer,
-      updatePlayerScore: state.updatePlayerScore,
+      updatePlayerScore: state.updatePlayerScore, // This will handle all score states
       canAddPlayer: state.canAddPlayer,
     }))
   );

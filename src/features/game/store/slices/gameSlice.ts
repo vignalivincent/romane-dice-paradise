@@ -3,7 +3,7 @@ import { GameHistory, Player } from '@/types/game';
 
 // Core game logic functions - kept within the store file
 export const hasPlayerCompletedAllCategories = (player: Player): boolean => {
-  return Object.values(player.scores).length === 13 && Object.values(player.scores).every((score) => score !== undefined);
+  return Object.values(player.scores).length === 13;
 };
 
 export const isGameComplete = (players: Player[]): boolean => {
@@ -12,7 +12,12 @@ export const isGameComplete = (players: Player[]): boolean => {
 };
 
 export const calculatePlayerScore = (player: Player): number => {
-  return Object.values(player.scores).reduce((sum, score) => sum + (score || 0), 0);
+  return Object.values(player.scores).reduce<number>((sum, score) => {
+    if (score === undefined || score === 'crossed') {
+      return sum;
+    }
+    return sum + score;
+  }, 0);
 };
 
 export const resetPlayerScores = (player: Player): Player => ({
@@ -70,9 +75,10 @@ export const createGameSlice: StateCreator<GameSliceDependencies & GameSlice, []
       if (players === lastPlayers) return lastResult;
 
       lastPlayers = players;
+      // Use calculateTotal instead of calculatePlayerScore for consistency
       lastResult = players.map((player) => ({
         name: player.name,
-        score: calculatePlayerScore(player),
+        score: get().calculateTotal(player),
       }));
       return lastResult;
     };

@@ -14,36 +14,25 @@ export const GameControls: FC = () => {
   const handleStartGame = () => {
     startGame();
     toast({
-      variant: "primary",
-      title: "GAME ON!",
-      description: "Que la meilleure gagne! 🏆",
-      className: "text-xl font-bold",
+      variant: 'primary',
+      description: 'Que le meilleure gagne ! 🏆',
+      className: 'text-xl font-bold',
     });
   };
 
   return (
     <div className="flex flex-col gap-4 justify-center">
-      
-
       <div className="flex flex-col gap-4">
         <Button
           onClick={isStarted ? endGame : handleStartGame}
           disabled={!hasEnoughPlayers && !isStarted}
           className={`w-full text-white font-semibold text-base lg:text-lg h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 ${
-            isStarted 
-              ? 'bg-amber-600/90 hover:bg-amber-600' 
-              : 'bg-emerald-600/90 hover:bg-emerald-600'
-          }`}
-        >
+            isStarted ? 'bg-amber-600/90 hover:bg-amber-600' : 'bg-emerald-600/90 hover:bg-emerald-600'
+          }`}>
           {isStarted ? `${t('game.controls.end')} 🎲` : `${t('game.controls.start')} ✨`}
         </Button>
-        {!hasEnoughPlayers && !isStarted && (
-          <InfoMessage>
-            {t('game.controls.minPlayers')}
-          </InfoMessage>
-        )}
-
+        {!hasEnoughPlayers && !isStarted && <InfoMessage>{t('game.controls.minPlayers')}</InfoMessage>}
       </div>
     </div>
   );
-}; 
+};

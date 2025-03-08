@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand';
-import { Player, ScoreCategory } from '@/types/game';
+import { Player, ScoreCategory, ScoreState } from '@/types/game';
 
 // Constants
 const MAX_PLAYERS = 5;
@@ -9,7 +9,8 @@ export interface PlayersSlice {
   canAddPlayer: () => boolean;
   addPlayer: (name: string) => void;
   removePlayer: (id: string) => void;
-  updatePlayerScore: (playerId: string, category: ScoreCategory, value: number) => void;
+  updatePlayerScore: (playerId: string, category: ScoreCategory, value: ScoreState) => void;
+  crossOutPlayerScore: (playerId: string, category: ScoreCategory) => void;
 }
 
 export const createPlayersSlice: StateCreator<PlayersSlice, [], [], PlayersSlice> = (set, get) => ({
@@ -52,6 +53,21 @@ export const createPlayersSlice: StateCreator<PlayersSlice, [], [], PlayersSlice
               scores: {
                 ...player.scores,
                 [category]: value,
+              },
+            }
+          : player
+      ),
+    })),
+
+  crossOutPlayerScore: (playerId, category) =>
+    set((state) => ({
+      players: state.players.map((player) =>
+        player.id === playerId
+          ? {
+              ...player,
+              scores: {
+                ...player.scores,
+                [category]: 'crossed',
               },
             }
           : player
