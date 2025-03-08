@@ -15,12 +15,13 @@ export interface ScoresSlice {
   getPlayersWithTotalScores: () => Array<{ name: string; score: number }>;
 }
 
-// Define what we need from other slices without directly importing them
-interface ScoreSliceDependencies {
+// Define what we need from other slices
+interface ScoreSliceWithDepencies extends ScoresSlice {
   players: Player[];
 }
 
-export const createScoresSlice: StateCreator<ScoresSlice & ScoreSliceDependencies, [], [], ScoresSlice> = (set, get) => ({
+// Changed the StateCreator type to correctly include dependencies
+export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], ScoresSlice> = (_, get) => ({
   getMaxScore: (category) => {
     switch (category) {
       case 'ones':
