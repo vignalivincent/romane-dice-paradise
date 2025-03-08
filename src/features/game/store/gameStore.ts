@@ -59,7 +59,6 @@ export const useGameActions = () =>
     useShallow((state) => ({
       startGame: state.startGame,
       endGame: state.endGame,
-      startNewGameWithSamePlayers: state.startNewGameWithSamePlayers,
       resetGame: state.resetGame,
     }))
   );

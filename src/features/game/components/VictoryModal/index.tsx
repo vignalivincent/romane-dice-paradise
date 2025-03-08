@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 interface VictoryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onNewGame: () => void;
   winner?: {
     name: string;
     score: number;
@@ -15,18 +16,9 @@ interface VictoryModalProps {
   }[];
 }
 
-export const VictoryModal: FC<VictoryModalProps> = ({
-  isOpen,
-  onClose,
-  winner,
-  players,
-}) => {
+export const VictoryModal: FC<VictoryModalProps> = ({ isOpen, onClose, onNewGame, winner, players }) => {
   const { t } = useTranslation();
-
-  // Si pas de gagnant, on prend le joueur avec le plus haut score
-  const actualWinner = winner || players.reduce((prev, current) => 
-    (current.score > prev.score) ? current : prev
-  , players[0]);
+  const actualWinner = winner || players.reduce((prev, current) => (current.score > prev.score ? current : prev), players[0]);
 
   if (!actualWinner) return null;
 
@@ -38,9 +30,7 @@ export const VictoryModal: FC<VictoryModalProps> = ({
         </DialogTitle>
         <div className="text-center space-y-4">
           <div className="text-6xl animate-bounce">🏆</div>
-          <h2 className="text-3xl font-bold text-purple-900">
-            {t('victory.title')}
-          </h2>
+          <h2 className="text-3xl font-bold text-purple-900">{t('victory.title')}</h2>
           <p className="text-xl text-purple-600">
             <b> {actualWinner.name}</b> {t('victory.winner')}
           </p>
@@ -52,40 +42,33 @@ export const VictoryModal: FC<VictoryModalProps> = ({
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-purple-900">
-            {t('victory.scores')}
-          </h3>
+          <h3 className="text-lg font-semibold text-purple-900">{t('victory.scores')}</h3>
           <div className="space-y-2">
             {players
               .sort((a, b) => b.score - a.score)
               .map((player, index) => (
-                <div
-                  key={player.name}
-                  className="flex items-center justify-between p-3 rounded-lg bg-purple-50"
-                >
+                <div key={player.name} className="flex items-center justify-between p-3 rounded-lg bg-purple-50">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">
-                      {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
-                    </span>
-                    <span className="font-medium text-purple-900">
-                      {player.name}
-                    </span>
+                    <span className="text-lg">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}</span>
+                    <span className="font-medium text-purple-900">{player.name}</span>
                   </div>
-                  <span className="font-bold text-purple-900">
-                    {player.score}
-                  </span>
+                  <span className="font-bold text-purple-900">{player.score}</span>
                 </div>
               ))}
           </div>
         </div>
 
-        <button
-          onClick={onClose}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition-colors text-xl shadow-md hover:shadow-lg border-2 border-purple-400"
-        >
-          {t('victory.actions.newGame')}
-        </button>
+        <div className="flex gap-4">
+          <button onClick={onClose} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-4 rounded-xl transition-colors text-lg">
+            {t('victory.actions.close')}
+          </button>
+          <button
+            onClick={onNewGame}
+            className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-xl transition-colors text-lg shadow-md hover:shadow-lg border-2 border-purple-400">
+            {t('victory.actions.newGame')}
+          </button>
+        </div>
       </DialogContent>
     </Dialog>
   );
-}; 
+};
