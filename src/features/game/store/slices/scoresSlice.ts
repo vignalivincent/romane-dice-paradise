@@ -10,7 +10,7 @@ export interface ScoresSlice {
   calculateSectionTotal: (player: Player, section: 'upper' | 'lower') => number;
   calculateTotal: (player: Player) => number;
   getUpperBonus: (player: Player) => number;
-  getLeadingPlayer: () => Player | null;
+  getLeadingPlayer: () => Player;
   getScoreStyle: (score: number | undefined, maxScore: number) => string;
   getPlayersWithTotalScores: () => Array<{ name: string; score: number }>;
 }
@@ -83,7 +83,6 @@ export const createScoresSlice: StateCreator<ScoresSlice & ScoreSliceDependencie
 
   getLeadingPlayer: () => {
     const { players } = get();
-    if (players.length === 0) return null;
 
     return players.reduce((leader, player) => {
       const leaderTotal = get().calculateTotal(leader);

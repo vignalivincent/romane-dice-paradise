@@ -18,8 +18,7 @@ import { ScoreCategoryUI } from '../../constants/categories';
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { players, isStarted, gameHistory, hasGameHistory, updatePlayerScore, endGame, calculateSectionTotal, getUpperBonus, getLeadingPlayer, getMaxScore } =
-    useGameStore();
+  const { players, isStarted, gameHistory, hasGameHistory, updatePlayerScore, endGame, calculateSectionTotal, getUpperBonus, getMaxScore } = useGameStore();
 
   const [selectedCell, setSelectedCell] = useState<{
     playerId: string;
@@ -120,7 +119,6 @@ export const ScoreBoard: FC = () => {
     setConfirmEndGameOpen(false);
   };
 
-  const leadingPlayer = getLeadingPlayer();
   const upperCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'upper');
   const lowerCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'lower');
 
@@ -129,15 +127,9 @@ export const ScoreBoard: FC = () => {
   const bonusValues = players.map((player) => getUpperBonus(player));
 
   return (
-    <div className="space-y-10 ">
-      <div className="space-y-1.5 sticky top-0 z-10">
-        <PlayersHeader
-          players={players}
-          leadingPlayerId={leadingPlayer?.id || null}
-          currentPlayerId={null}
-          isExpanded={isExpanded}
-          onToggleExpand={handleToggleExpand}
-        />
+    <div className="space-y-10">
+      <div className="space-y-1.5">
+        <PlayersHeader isExpanded={isExpanded} onToggleExpand={handleToggleExpand} />
 
         {/* Section supérieure */}
         <div className="space-y-1.5">

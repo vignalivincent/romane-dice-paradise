@@ -19,14 +19,13 @@ const App: FC = () => {
           <div className="text-4xl">📱</div>
           <h1 className="text-2xl font-bold text-purple-900">Version Mobile Uniquement</h1>
           <p className="text-purple-700">
-            Cette application est optimisée pour une utilisation sur mobile. 
-            Veuillez y accéder depuis votre smartphone pour une meilleure expérience.
+            Cette application est optimisée pour une utilisation sur mobile. Veuillez y accéder depuis votre smartphone pour une meilleure expérience.
           </p>
         </div>
       </div>
 
       {/* Mobile App */}
-      <div className="md:hidden min-h-screen w-screen overflow-x-hidden flex flex-col bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400">
+      <div className="md:hidden min-h-screen w-screen flex flex-col bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400">
         <main className="flex-1 flex flex-col w-full p-4 sm:p-6">
           <div className="mx-auto w-full max-w-5xl flex flex-col flex-1">
             <div className="flex flex-col items-center justify-center mb-6">
@@ -35,17 +34,15 @@ const App: FC = () => {
                 <span>{t('app.title')}</span>
                 <span>🎲</span>
               </h1>
-              <p className="text-white/90 text-sm font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic text-center">
-                {t('app.subtitle')} ✨
-              </p>
+              <p className="text-white/90 text-sm font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic text-center">{t('app.subtitle')} ✨</p>
             </div>
-            
+
             {!isStarted ? (
               <div className="flex flex-col flex-1 gap-6">
                 <div className="backdrop-blur-md bg-white/40 rounded-xl p-4 shadow-xl ring-1 ring-white/50 flex flex-col">
                   <PlayersList />
                 </div>
-                
+
                 <div className="backdrop-blur-md bg-white/40 rounded-xl p-4 shadow-xl ring-1 ring-white/50 flex flex-col mt-auto">
                   <GameControls />
                 </div>
