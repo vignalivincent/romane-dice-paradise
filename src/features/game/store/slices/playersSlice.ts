@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand';
 import { Player, ScoreCategory } from '@/types/game';
 
 // Constants
-const MAX_PLAYERS = 6;
+const MAX_PLAYERS = 5;
 
 export interface PlayersSlice {
   players: Player[];
