@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGameStore } from '../../store/gameStore';
+import { useGameStore, useScoreCalculations } from '../../store/gameStore';
 import { useVictory } from '../../hooks/useVictory';
 import { ScoreCategory, ScoreState } from '@/types/game';
 import { ScoreModal } from '../ScoreModal';
@@ -20,19 +20,10 @@ import { YahtzeeAnimation } from '../YahtzeeAnimation';
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const {
-    players,
-    isStarted,
-    isGameEnded,
-    gameHistory,
-    hasGameHistory,
-    updatePlayerScore,
-    endGame,
-    resetGame,
-    calculateSectionTotal,
-    getUpperBonus,
-    getMaxScore,
-  } = useGameStore();
+  const { players, isStarted, isGameEnded, gameHistory, hasGameHistory, updatePlayerScore, endGame, resetGame } = useGameStore();
+  const { getUpperBonus, getMaxScore } = useScoreCalculations();
+
+  const { calculateSectionTotal } = useScoreCalculations();
 
   const { isAnimationActive, playAnimation, handleAnimationComplete, animationDuration } = useYahtzeeAnimation();
 
@@ -130,7 +121,6 @@ export const ScoreBoard: FC = () => {
 
     updatePlayerScore(playerId, category, score);
     if (category === 'yahtzee' && score === maxScore && player) {
-      // Toast légendaire pour Yahtzee en utilisant la constante
       toast({
         variant: TOAST_MESSAGES.yahtzee.variant,
         description: t(TOAST_MESSAGES.yahtzee.description, { name: player.name }),
@@ -138,7 +128,6 @@ export const ScoreBoard: FC = () => {
         duration: TOAST_MESSAGES.yahtzee.duration,
       });
 
-      // Jouer l'animation après le toast
       return playAnimation();
     }
 

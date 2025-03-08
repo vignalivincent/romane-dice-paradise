@@ -4,7 +4,6 @@ import { devtools } from 'zustand/middleware';
 import { PlayersSlice, createPlayersSlice } from './slices/playersSlice';
 import { GameSlice, createGameSlice } from './slices/gameSlice';
 import { ScoresSlice, createScoresSlice } from './slices/scoresSlice';
-import { isGameComplete, hasGameHistory } from './utils/gameHelpers';
 import { useShallow } from 'zustand/react/shallow';
 
 // Constants
@@ -36,33 +35,7 @@ export const useGameStore = create<BoundState>()(
   )
 );
 
-// Simple primitives
-export const useIsGameStarted = () => useGameStore((state) => state.isStarted);
-export const usePlayerCount = () => useGameStore((state) => state.players.length);
-
-// Object returns - use useShallow for automatic shallow comparison
-export const useGamePlayers = () => useGameStore(useShallow((state) => state.players));
-
 // For method bundles, use useShallow for stable references
-export const usePlayerActions = () =>
-  useGameStore(
-    useShallow((state) => ({
-      addPlayer: state.addPlayer,
-      removePlayer: state.removePlayer,
-      updatePlayerScore: state.updatePlayerScore, // This will handle all score states
-      canAddPlayer: state.canAddPlayer,
-    }))
-  );
-
-export const useGameActions = () =>
-  useGameStore(
-    useShallow((state) => ({
-      startGame: state.startGame,
-      endGame: state.endGame,
-      resetGame: state.resetGame,
-    }))
-  );
-
 export const useScoreCalculations = () =>
   useGameStore(
     useShallow((state) => ({
@@ -73,27 +46,5 @@ export const useScoreCalculations = () =>
       getLeadingPlayer: state.getLeadingPlayer,
       getScoreStyle: state.getScoreStyle,
       getPlayersWithTotalScores: state.getPlayersWithTotalScores,
-    }))
-  );
-
-// For computed values that depend on state
-export const useGameStatus = () =>
-  useGameStore(
-    useShallow((state) => {
-      return {
-        isStarted: state.isStarted,
-        isComplete: isGameComplete(state.players),
-        hasHistory: hasGameHistory(state.gameHistory),
-        playerCount: state.players.length,
-      };
-    })
-  );
-
-// For components that need both game state and players
-export const useGameWithPlayers = () =>
-  useGameStore(
-    useShallow((state) => ({
-      isStarted: state.isStarted,
-      players: state.players,
     }))
   );

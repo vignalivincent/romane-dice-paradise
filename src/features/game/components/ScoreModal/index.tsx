@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { ChanceInput } from './ChanceInput';
 import { ScoreGrid } from './ScoreGrid';
-import { AdditionalScoreGrid } from './AdditionalScoreGrid';
 import { ModalHeader } from './ModalHeader';
 import { useScoreModal } from '../../hooks/useScoreModal';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
@@ -20,19 +19,7 @@ interface ScoreModalProps {
 }
 
 export const ScoreModal: FC<ScoreModalProps> = (props) => {
-  const {
-    chanceValue,
-    setChanceValue,
-    handleChanceSubmit,
-    handleCrossOut,
-    handleScoreSelect,
-    handleAdditionalScoreSelect,
-    possibleScores,
-    additionalScores,
-    baseScore,
-    handleReset,
-    needsAdditionalScore,
-  } = useScoreModal(props);
+  const { chanceValue, setChanceValue, handleChanceSubmit, handleCrossOut, handleScoreSelect, possibleScores, handleReset } = useScoreModal(props);
 
   return (
     <Dialog open={props.isOpen} onOpenChange={props.onClose}>
@@ -49,8 +36,6 @@ export const ScoreModal: FC<ScoreModalProps> = (props) => {
 
         {props.category.id === 'chance' ? (
           <ChanceInput value={chanceValue} onChange={setChanceValue} onSubmit={handleChanceSubmit} onReset={handleReset} />
-        ) : needsAdditionalScore ? (
-          <AdditionalScoreGrid scores={additionalScores} onSelect={handleAdditionalScoreSelect} baseScore={baseScore!} category={props.category.id} />
         ) : (
           <ScoreGrid scores={possibleScores} onSelect={handleScoreSelect} onBarrer={handleCrossOut} onReset={handleReset} />
         )}

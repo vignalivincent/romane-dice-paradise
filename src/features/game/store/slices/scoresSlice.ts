@@ -46,7 +46,7 @@ export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], Sc
       case 'threeOfAKind':
         return 30;
       case 'fourOfAKind':
-        return 30;
+        return 40;
       case 'fullHouse':
         return 25;
       case 'smallStraight':
@@ -98,22 +98,18 @@ export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], Sc
   getScoreStyle: (score, maxScore) => {
     if (score === undefined) return 'bg-transparent';
 
-    // Crossed out score: pale red with cross pattern
     if (score === 'crossed') {
       return 'text-red-500 font-bold text-xl bg-transparent ';
     }
 
-    // Score of 0 : pale red
     if (score === 0) {
       return 'bg-red-50 border border-red-200';
     }
 
-    // Maximum score : pale green
     if (score === maxScore) {
       return 'bg-emerald-50 border border-emerald-200';
     }
 
-    // Intermediate score : red to green gradient
     const percentage = score / maxScore;
     if (percentage <= 0.33) {
       return 'bg-red-50';

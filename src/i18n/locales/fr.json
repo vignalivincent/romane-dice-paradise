@@ -88,23 +88,23 @@
       },
       "threeOfAKind": {
         "name": "Brelan",
-        "description": "3 dés identiques"
+        "description": "3 dés identiques, vaut 30 points"
       },
       "fourOfAKind": {
         "name": "Carré",
-        "description": "4 dés identiques"
+        "description": "4 dés identiques, vaut 40 points"
       },
       "fullHouse": {
         "name": "Full",
-        "description": "3 + 2 dés identiques"
+        "description": "3 + 2 dés identiques, vaut 25 points"
       },
       "smallStraight": {
         "name": "Petite suite",
-        "description": "4 dés qui se suivent"
+        "description": "4 dés qui se suivent, vaut 30 points"
       },
       "largeStraight": {
         "name": "Grande suite",
-        "description": "5 dés qui se suivent"
+        "description": "5 dés qui se suivent, vaut 40 points"
       },
       "yahtzee": {
         "name": "Yams",
