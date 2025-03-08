@@ -1,15 +1,22 @@
 import { useState, useCallback } from 'react';
 
-export function useYahtzeeAnimation() {
-  const [isPlaying, setIsPlaying] = useState(false);
+export function useYahtzeeAnimation(duration = 3000) {
+  const [isAnimationActive, setIsAnimationActive] = useState(false);
 
   const playAnimation = useCallback(() => {
-    setIsPlaying(true);
+    console.log('Triggering Yahtzee animation!');
+    setIsAnimationActive(true);
   }, []);
 
-  const stopAnimation = useCallback(() => {
-    setIsPlaying(false);
+  const handleAnimationComplete = useCallback(() => {
+    console.log('Animation completed');
+    setIsAnimationActive(false);
   }, []);
 
-  return { isPlaying, playAnimation, stopAnimation };
+  return {
+    isAnimationActive,
+    playAnimation,
+    handleAnimationComplete,
+    animationDuration: duration,
+  };
 }

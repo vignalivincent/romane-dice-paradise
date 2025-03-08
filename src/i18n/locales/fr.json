@@ -160,6 +160,12 @@
     "crossOut": {
       "title": "Case barrée",
       "description": "La case a été barrée et ne rapportera aucun point."
+    },
+    "yahtzee": {
+      "description": "🌟 {{name}}, tu es une légende !"
     }
+  },
+  "animations": {
+    "yahtzee": "Yams! 🎲"
   }
 }
