@@ -13,14 +13,7 @@ interface ScoreSectionProps {
   isExpanded: boolean;
 }
 
-export const ScoreSection: FC<ScoreSectionProps> = ({ 
-  categories, 
-  players, 
-  onSelect,
-  focusedCategory,
-  onCategoryFocus,
-  isExpanded
-}) => {
+export const ScoreSection: FC<ScoreSectionProps> = ({ categories, players, onSelect, focusedCategory, onCategoryFocus, isExpanded }) => {
   const getCategoryTopOffset = (index: number) => {
     const cellHeight = 48; // h-12 in pixels
     const gap = 6; // space-y-1.5 in pixels
@@ -29,9 +22,11 @@ export const ScoreSection: FC<ScoreSectionProps> = ({
 
   return (
     <div className="relative">
-      <div className="grid gap-x-2" style={{ 
-        gridTemplateColumns: '44px minmax(0, 1fr)'
-      }}>
+      <div
+        className="grid gap-x-2"
+        style={{
+          gridTemplateColumns: '44px minmax(0, 1fr)',
+        }}>
         {/* Catégories */}
         <div className="space-y-1.5 relative">
           {categories.map((category, index) => (
@@ -41,30 +36,31 @@ export const ScoreSection: FC<ScoreSectionProps> = ({
                 isExpanded={isExpanded}
                 isFocused={!isExpanded && focusedCategory?.id === category.id}
                 onFocus={onCategoryFocus}
-                style={!isExpanded && focusedCategory?.id === category.id ? {
-                  position: 'absolute',
-                  top: getCategoryTopOffset(index),
-                  left: 0,
-                  right: 0
-                } : undefined}
+                style={
+                  !isExpanded && focusedCategory?.id === category.id
+                    ? {
+                        position: 'absolute',
+                        top: getCategoryTopOffset(index),
+                        left: 0,
+                        right: 0,
+                      }
+                    : undefined
+                }
               />
             </div>
           ))}
         </div>
 
         {/* Scores */}
-        <div className="grid gap-x-1 w-full" style={{ 
-          gridTemplateColumns: `repeat(${players.length}, 1fr)` 
-        }}>
+        <div
+          className="grid gap-x-1 w-full"
+          style={{
+            gridTemplateColumns: `repeat(${players.length}, 1fr)`,
+          }}>
           {players.map((player) => (
             <div key={player.id} className="space-y-1.5 min-w-0">
               {categories.map((category) => (
-                <ScoreCell
-                  key={category.id}
-                  player={player}
-                  category={category}
-                  onSelect={onSelect}
-                />
+                <ScoreCell key={category.id} player={player} category={category} onSelect={onSelect} />
               ))}
             </div>
           ))}
@@ -72,4 +68,4 @@ export const ScoreSection: FC<ScoreSectionProps> = ({
       </div>
     </div>
   );
-}; 
+};
