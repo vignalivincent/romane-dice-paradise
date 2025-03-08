@@ -25,7 +25,7 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({ isExpanded, onToggleExpa
 
   return (
     <div
-      className={cn('grid justify-center gap-x-2 bg-blend-soft-light', !isExpanded && 'sticky top-0 z-40')}
+      className={cn('grid justify-center gap-x-2 bg-blend-soft-light', !isExpanded && 'sticky top-1 z-40')}
       style={{ gridTemplateColumns: '44px minmax(0, 1fr)' }}>
       <button
         onClick={onToggleExpand}
@@ -41,7 +41,7 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({ isExpanded, onToggleExpa
         </div>
       </button>
       <div
-        className="grid w-full backdrop-contrast-125 backdrop-blur-sm rounded-xl border pt-[0.75rem] pb-2 border-purple-500"
+        className="grid w-full backdrop-contrast-125 backdrop-blur-lg rounded-xl border pt-[0.75rem] pb-2 border-purple-500"
         style={{ gridTemplateColumns: `repeat(${players.length}, 1fr)` }}>
         {players.map((player) => {
           const isLeading = player.id === leadingPlayerId;
