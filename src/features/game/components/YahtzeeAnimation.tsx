@@ -8,7 +8,6 @@ interface YahtzeeAnimationProps {
   duration?: number;
 }
 
-// Add keyframe animation to the component
 const pulseKeyframes = `
   @keyframes yahtzee-pulse {
     0% {
@@ -55,10 +54,6 @@ export const YahtzeeAnimation: React.FC<YahtzeeAnimationProps> = ({ isActive, on
     }
   }, [isActive, onComplete, duration]);
 
-  useEffect(() => {
-    console.log('Animation visibility state:', isVisible);
-  }, [isVisible]);
-
   if (!isVisible) return null;
 
   return (
@@ -73,19 +68,13 @@ export const YahtzeeAnimation: React.FC<YahtzeeAnimationProps> = ({ isActive, on
         width: '100%',
         height: '100vh',
       }}>
-      {/* Confetti with adjusted position */}
       <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
         numberOfPieces={1000}
         recycle={false}
         gravity={0.5}
-        colors={[
-          '#FFD700', // Gold
-          '#FFA500', // Orange
-          '#FFFFFF', // White
-          '#FF4500', // Red-Orange
-        ]}
+        colors={['#FFD700', '#FFA500', '#FFFFFF', '#FF4500']}
         confettiSource={{
           x: window.innerWidth / 2,
           y: window.innerHeight / 2,
@@ -97,7 +86,6 @@ export const YahtzeeAnimation: React.FC<YahtzeeAnimationProps> = ({ isActive, on
         tweenDuration={100}
       />
 
-      {/* Text centered absolutely in the viewport */}
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
         <div
           className="text-4xl font-bold text-[#FFD700]"
