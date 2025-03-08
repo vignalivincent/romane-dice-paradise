@@ -7,12 +7,10 @@ interface InfoMessageProps {
 }
 
 export const InfoMessage: FC<InfoMessageProps> = ({ children, icon, withSparkles = false }) => (
-  <div className="flex items-center justify-center gap-3 px-6 py-4 bg-red-100/20 backdrop-blur-sm border border-red-200/30 rounded-2xl">
+  <div className="flex items-center justify-center gap-3 px-6 py-4 border border-red-400 border-dotted  backdrop-blur-sm rounded-2xl">
     {icon}
     {withSparkles && <span className="opacity-75">✨</span>}
-    <span className="text-white font-medium text-sm lg:text-base">
-      {children}
-    </span>
+    <span className="text-red-500 text-xs font-normal lg:text-base">{children}</span>
     {withSparkles && <span className="opacity-75">✨</span>}
   </div>
-); 
+);
