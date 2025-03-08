@@ -18,18 +18,7 @@ import { ScoreCategoryUI } from '../../constants/categories';
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { 
-    players, 
-    isStarted,
-    gameHistory,
-    hasGameHistory,
-    updatePlayerScore,
-    endGame,
-    calculateSectionTotal,
-    getUpperBonus,
-    getLeadingPlayer,
-    getMaxScore,
-  } = useGameStore();
+  const { players, isStarted, gameHistory, hasGameHistory, updatePlayerScore, endGame, calculateSectionTotal, getUpperBonus, getMaxScore } = useGameStore();
 
   const [selectedCell, setSelectedCell] = useState<{
     playerId: string;
@@ -57,14 +46,9 @@ export const ScoreBoard: FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [focusedCategory, isBonusExpanded]);
 
-  const {
-    isVictoryModalOpen,
-    winner,
-    playersWithTotalScores,
-    closeVictoryModal
-  } = useVictory({
+  const { isVictoryModalOpen, winner, playersWithTotalScores, closeVictoryModal } = useVictory({
     players,
-    onNewGame: endGame
+    onNewGame: endGame,
   });
 
   if (!isStarted || players.length === 0) return null;
@@ -96,24 +80,24 @@ export const ScoreBoard: FC = () => {
   const handleScoreSelect = (score: number) => {
     if (!selectedCell) return;
     const { playerId, category } = selectedCell;
-    const player = players.find(p => p.id === playerId);
+    const player = players.find((p) => p.id === playerId);
     const maxScore = getMaxScore(category);
 
     updatePlayerScore(playerId, category, score);
 
     if (score === maxScore && player) {
       toast({
-        variant: "success",
-        title: "🍾 Tu me fais rêver !",
+        variant: 'success',
+        title: '🍾 Tu me fais rêver !',
         description: `${player.name}, j'ai toujours cru en toi ! Rendez-vous au sommet.`,
-        className: "text-xl font-bold",
+        className: 'text-xl font-bold',
       });
     } else if (score === 0 && player) {
       toast({
-        variant: "destructive",
-        title: "💩 Aïe aïe aïe...",
+        variant: 'destructive',
+        title: '💩 Aïe aïe aïe...',
         description: `${player.name}, toi il va falloir te reprendre ! Ne gâche plus ton potentiel comme ça.`,
-        className: "text-xl font-bold",
+        className: 'text-xl font-bold',
       });
     }
 
@@ -135,24 +119,17 @@ export const ScoreBoard: FC = () => {
     setConfirmEndGameOpen(false);
   };
 
-  const leadingPlayer = getLeadingPlayer();
-  const upperCategories = SCORE_CATEGORIES.filter(cat => cat.section === 'upper');
-  const lowerCategories = SCORE_CATEGORIES.filter(cat => cat.section === 'lower');
+  const upperCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'upper');
+  const lowerCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'lower');
 
-  const upperTotals = players.map(player => calculateSectionTotal(player, 'upper'));
-  const lowerTotals = players.map(player => calculateSectionTotal(player, 'lower'));
-  const bonusValues = players.map(player => getUpperBonus(player));
+  const upperTotals = players.map((player) => calculateSectionTotal(player, 'upper'));
+  const lowerTotals = players.map((player) => calculateSectionTotal(player, 'lower'));
+  const bonusValues = players.map((player) => getUpperBonus(player));
 
   return (
     <div className="space-y-10">
       <div className="space-y-1.5">
-        <PlayersHeader 
-          players={players} 
-          leadingPlayerId={leadingPlayer?.id || null}
-          currentPlayerId={null}
-          isExpanded={isExpanded}
-          onToggleExpand={handleToggleExpand}
-        />
+        <PlayersHeader isExpanded={isExpanded} onToggleExpand={handleToggleExpand} />
 
         {/* Section supérieure */}
         <div className="space-y-1.5">
@@ -165,17 +142,13 @@ export const ScoreBoard: FC = () => {
             isExpanded={isExpanded}
           />
 
-          <TotalRow
-            values={upperTotals}
-            players={players.length}
-            hideLabel
-          />
+          <TotalRow values={upperTotals} players={players.length} hideLabel />
 
           <div className="category-cell">
             <TotalRow
               values={bonusValues}
               players={players.length}
-              className={(value) => value > 0 ? 'bg-emerald-400/20 text-emerald-50' : 'bg-white/10 text-white/50'}
+              className={(value) => (value > 0 ? 'bg-emerald-400/20 text-emerald-50' : 'bg-white/10 text-white/50')}
               isBonus
               isExpanded={isExpanded}
               isFocused={isBonusExpanded}
@@ -195,11 +168,7 @@ export const ScoreBoard: FC = () => {
             isExpanded={isExpanded}
           />
 
-          <TotalRow
-            values={lowerTotals}
-            players={players.length}
-            hideLabel
-          />
+          <TotalRow values={lowerTotals} players={players.length} hideLabel />
         </div>
       </div>
 
@@ -207,16 +176,14 @@ export const ScoreBoard: FC = () => {
       <div className="flex gap-3">
         <button
           onClick={handleEndGameClick}
-          className="flex-1 bg-red-500/90 hover:bg-red-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
-        >
+          className="flex-1 bg-red-500/90 hover:bg-red-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center">
           {t('game.actions.end')} 🏁
         </button>
 
         {hasGameHistory() && (
           <button
             onClick={() => setRankingModalOpen(true)}
-            className="w-12 sm:w-14 bg-purple-500/90 hover:bg-purple-500 text-white font-semibold h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center"
-          >
+            className="w-12 sm:w-14 bg-purple-500/90 hover:bg-purple-500 text-white font-semibold h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center">
             🏆
           </button>
         )}
@@ -226,29 +193,15 @@ export const ScoreBoard: FC = () => {
         isOpen={modalOpen}
         onClose={handleModalClose}
         onSelect={handleScoreSelect}
-        category={selectedCell ? SCORE_CATEGORIES.find(c => c.id === selectedCell.category)! : SCORE_CATEGORIES[0]}
-        playerName={selectedCell ? players.find(p => p.id === selectedCell.playerId)?.name || '' : ''}
+        category={selectedCell ? SCORE_CATEGORIES.find((c) => c.id === selectedCell.category)! : SCORE_CATEGORIES[0]}
+        playerName={selectedCell ? players.find((p) => p.id === selectedCell.playerId)?.name || '' : ''}
       />
 
-      <VictoryModal
-        isOpen={isVictoryModalOpen}
-        onClose={closeVictoryModal}
-        winner={winner!}
-        players={playersWithTotalScores}
-      />
+      <VictoryModal isOpen={isVictoryModalOpen} onClose={closeVictoryModal} winner={winner!} players={playersWithTotalScores} />
 
-      <RankingModal
-        isOpen={rankingModalOpen}
-        onClose={() => setRankingModalOpen(false)}
-        gameHistory={gameHistory}
-        currentPlayers={players}
-      />
+      <RankingModal isOpen={rankingModalOpen} onClose={() => setRankingModalOpen(false)} gameHistory={gameHistory} currentPlayers={players} />
 
-      <ConfirmEndGameModal
-        isOpen={confirmEndGameOpen}
-        onClose={() => setConfirmEndGameOpen(false)}
-        onConfirm={handleEndGameConfirm}
-      />
+      <ConfirmEndGameModal isOpen={confirmEndGameOpen} onClose={() => setConfirmEndGameOpen(false)} onConfirm={handleEndGameConfirm} />
     </div>
   );
-}; 
+};
