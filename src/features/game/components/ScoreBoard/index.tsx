@@ -14,6 +14,8 @@ import { SCORE_CATEGORIES } from '../../constants/categories';
 import { TOAST_MESSAGES } from '../../constants/toastMessages';
 import { useToast } from '@/components/ui/use-toast';
 import { ScoreCategoryUI } from '../../constants/categories';
+import { useYahtzeeAnimation } from '../../hooks/useYahtzeeAnimation';
+import { YahtzeeAnimation } from '../YahtzeeAnimation';
 
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
@@ -31,6 +33,8 @@ export const ScoreBoard: FC = () => {
     getUpperBonus,
     getMaxScore,
   } = useGameStore();
+
+  const { isAnimationActive, playAnimation, handleAnimationComplete, animationDuration } = useYahtzeeAnimation();
 
   const [selectedCell, setSelectedCell] = useState<{
     playerId: string;
@@ -125,8 +129,20 @@ export const ScoreBoard: FC = () => {
     const maxScore = getMaxScore(category);
 
     updatePlayerScore(playerId, category, score);
+    if (category === 'yahtzee' && score === maxScore && player) {
+      // Toast légendaire pour Yahtzee en utilisant la constante
+      toast({
+        variant: TOAST_MESSAGES.yahtzee.variant,
+        description: t(TOAST_MESSAGES.yahtzee.description, { name: player.name }),
+        className: TOAST_MESSAGES.yahtzee.className,
+        duration: TOAST_MESSAGES.yahtzee.duration,
+      });
 
-    if (typeof score === 'number' && score === maxScore && player) {
+      // Jouer l'animation après le toast
+      return playAnimation();
+    }
+
+    if (score === maxScore && player) {
       toast({
         variant: TOAST_MESSAGES.maxScore.variant,
         title: t(TOAST_MESSAGES.maxScore.title),
@@ -248,6 +264,8 @@ export const ScoreBoard: FC = () => {
         )}
 
         <RankingModal isOpen={rankingModalOpen} onClose={() => setRankingModalOpen(false)} gameHistory={gameHistory} currentPlayers={players} />
+
+        <YahtzeeAnimation isActive={isAnimationActive} onComplete={handleAnimationComplete} duration={animationDuration} />
 
         <ConfirmEndGameModal isOpen={confirmEndGameOpen} onClose={() => setConfirmEndGameOpen(false)} onConfirm={handleEndGameConfirm} />
       </div>
