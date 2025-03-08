@@ -1,8 +1,9 @@
 import { StateCreator } from 'zustand';
-import { GameHistory, Player } from '@/types/game';
+import { Player } from '@/types/game';
 
 // Core game logic functions - kept within the store file
 export const hasPlayerCompletedAllCategories = (player: Player): boolean => {
+  // Note: crossed-out counts as completed
   return Object.values(player.scores).length === 13;
 };
 
@@ -11,31 +12,21 @@ export const isGameComplete = (players: Player[]): boolean => {
   return players.every(hasPlayerCompletedAllCategories);
 };
 
-export const calculatePlayerScore = (player: Player): number => {
-  return Object.values(player.scores).reduce<number>((sum, score) => {
-    if (score === undefined || score === 'crossed') {
-      return sum;
-    }
-    return sum + score;
-  }, 0);
-};
-
 export const resetPlayerScores = (player: Player): Player => ({
   ...player,
   scores: {},
 });
 
 export interface PlayerWithScore {
+  id: string;
   name: string;
   score: number;
 }
 
-export interface GameSlice {
+export interface CurrentGameSlice {
   isStarted: boolean;
   isGameEnded: boolean;
-  gameHistory: GameHistory[];
 
-  hasGameHistory: () => boolean;
   isGameComplete: () => boolean;
   getPlayersWithScores: () => PlayerWithScore[];
   getWinner: () => PlayerWithScore | null;
@@ -45,13 +36,14 @@ export interface GameSlice {
   resetGame: () => void;
 }
 
-interface GameSliceDependencies {
+interface CurrentGameSliceDependencies {
   players: Player[];
   getLeadingPlayer: () => Player | null;
   calculateTotal: (player: Player) => number;
+  addGameToHistory: (players: PlayerWithScore[], winnerId: string) => void;
 }
 
-export const createGameSlice: StateCreator<GameSliceDependencies & GameSlice, [], [], GameSlice> = (set, get) => {
+export const createCurrentGameSlice: StateCreator<CurrentGameSliceDependencies & CurrentGameSlice, [], [], CurrentGameSlice> = (set, get) => {
   const memoizedIsGameComplete = (() => {
     let lastPlayers: Player[] = [];
     let lastResult = false;
@@ -75,8 +67,8 @@ export const createGameSlice: StateCreator<GameSliceDependencies & GameSlice, []
       if (players === lastPlayers) return lastResult;
 
       lastPlayers = players;
-      // Use calculateTotal instead of calculatePlayerScore for consistency
       lastResult = players.map((player) => ({
+        id: player.id,
         name: player.name,
         score: get().calculateTotal(player),
       }));
@@ -115,10 +107,26 @@ export const createGameSlice: StateCreator<GameSliceDependencies & GameSlice, []
   return {
     isStarted: false,
     isGameEnded: false,
-    gameHistory: [],
 
-    hasGameHistory: () => get().gameHistory.length > 0,
-    isGameComplete: memoizedIsGameComplete,
+    isGameComplete: () => {
+      const { players } = get();
+
+      if (!players || players.length === 0) {
+        console.log('Game not complete: No players');
+        return false;
+      }
+
+      const allCategoriesComplete = players.every((player) => {
+        const filledCategories = Object.keys(player.scores).length;
+        const totalCategories = 13;
+
+        return filledCategories >= totalCategories;
+      });
+
+      console.log(`Game complete check: ${allCategoriesComplete ? 'Yes' : 'No'}`);
+      return allCategoriesComplete;
+    },
+
     getPlayersWithScores: memoizedGetPlayersWithScores,
     getWinner: memoizedGetWinner,
 
@@ -145,21 +153,14 @@ export const createGameSlice: StateCreator<GameSliceDependencies & GameSlice, []
           };
         }
 
-        const gameRecord: GameHistory = {
-          id: crypto.randomUUID(),
-          date: new Date().toISOString(),
-          players: state.players.map((player) => ({
-            id: player.id,
-            name: player.name,
-            score: get().calculateTotal(player),
-          })),
-          winnerId: winner.id,
-        };
+        const playersWithScores = get().getPlayersWithScores();
+
+        // Add game to history (handled by history slice)
+        get().addGameToHistory(playersWithScores, winner.id);
 
         return {
           isStarted: true,
           isGameEnded: true,
-          gameHistory: [...state.gameHistory, gameRecord],
         };
       });
     },

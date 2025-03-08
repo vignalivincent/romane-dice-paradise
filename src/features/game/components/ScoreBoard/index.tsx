@@ -1,6 +1,6 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGameStore, useScoreCalculations } from '../../store/gameStore';
+import { useGame, usePlayers, useScore } from '../../store/gameStore';
 import { useVictory } from '../../hooks/useVictory';
 import { ScoreCategory, ScoreState } from '@/types/game';
 import { ScoreModal } from '../ScoreModal';
@@ -20,10 +20,10 @@ import { YahtzeeAnimation } from '../YahtzeeAnimation';
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { players, isStarted, isGameEnded, gameHistory, hasGameHistory, updatePlayerScore, endGame, resetGame } = useGameStore();
-  const { getUpperBonus, getMaxScore } = useScoreCalculations();
-
-  const { calculateSectionTotal } = useScoreCalculations();
+  const { players } = usePlayers();
+  const { hasStarted, gameHistory, doResetGame, doEndGame, hasEnded, isGameComplete } = useGame();
+  const isCompleted = isGameComplete();
+  const { getUpperBonus, getMaxScore, doUpdateScore, doCalculatePlayerSectionTotal } = useScore();
 
   const { isAnimationActive, playAnimation, handleAnimationComplete, animationDuration } = useYahtzeeAnimation();
 
@@ -53,32 +53,27 @@ export const ScoreBoard: FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [focusedCategory, isBonusExpanded]);
 
-  const isGameCompleteDirect = useGameStore((state) => state.isGameComplete());
-
-  const { isVictoryModalOpen, winner, playersWithTotalScores, closeVictoryModal, handleNewGame } = useVictory({
-    onReset: resetGame,
-    isGameEnded,
-  });
+  const { isVictoryModalOpen, closeVictoryModal, handleNewGame } = useVictory();
 
   const hasEndedGame = useRef(false);
-  const prevGameComplete = useRef(isGameCompleteDirect);
+  const prevGameComplete = useRef(isCompleted);
 
   useEffect(() => {
-    if (isGameCompleteDirect !== prevGameComplete.current) {
-      prevGameComplete.current = isGameCompleteDirect;
+    if (isCompleted !== prevGameComplete.current) {
+      prevGameComplete.current = isCompleted;
 
-      if (isGameCompleteDirect && !isGameEnded && !hasEndedGame.current) {
+      if (isCompleted && !hasEnded && !hasEndedGame.current) {
         hasEndedGame.current = true;
         setTimeout(() => {
-          endGame();
+          doEndGame();
         }, 0);
-      } else if (!isGameCompleteDirect) {
+      } else if (!isCompleted) {
         hasEndedGame.current = false;
       }
     }
-  }, [isGameCompleteDirect, isGameEnded, endGame]);
+  }, [isCompleted, hasEndedGame, doEndGame]);
 
-  if (!isStarted || players.length === 0) return null;
+  if (!hasStarted || players.length === 0) return null;
 
   const handleCategoryFocus = (category: ScoreCategoryUI) => {
     if (isExpanded) return;
@@ -99,7 +94,7 @@ export const ScoreBoard: FC = () => {
   };
 
   const handleCellClick = (playerId: string, category: ScoreCategory) => {
-    if (isGameEnded) {
+    if (hasEnded) {
       toast({
         variant: TOAST_MESSAGES.gameEnded.variant,
         title: t(TOAST_MESSAGES.gameEnded.title),
@@ -108,7 +103,7 @@ export const ScoreBoard: FC = () => {
       return;
     }
 
-    if (!isStarted) return;
+    if (!hasStarted) return;
     setSelectedCell({ playerId, category });
     setModalOpen(true);
   };
@@ -119,7 +114,7 @@ export const ScoreBoard: FC = () => {
     const player = players.find((p) => p.id === playerId);
     const maxScore = getMaxScore(category);
 
-    updatePlayerScore(playerId, category, score);
+    doUpdateScore(playerId, category, score);
     if (category === 'yahtzee' && score === maxScore && player) {
       toast({
         variant: TOAST_MESSAGES.yahtzee.variant,
@@ -157,8 +152,8 @@ export const ScoreBoard: FC = () => {
   };
 
   const handleEndGameClick = () => {
-    if (isGameEnded) {
-      resetGame();
+    if (hasEnded) {
+      doResetGame();
       return;
     }
 
@@ -166,15 +161,15 @@ export const ScoreBoard: FC = () => {
   };
 
   const handleEndGameConfirm = () => {
-    endGame();
+    doEndGame();
     setConfirmEndGameOpen(false);
   };
 
   const upperCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'upper');
   const lowerCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'lower');
 
-  const upperTotals = players.map((player) => calculateSectionTotal(player, 'upper'));
-  const lowerTotals = players.map((player) => calculateSectionTotal(player, 'lower'));
+  const upperTotals = players.map((player) => doCalculatePlayerSectionTotal(player, 'upper'));
+  const lowerTotals = players.map((player) => doCalculatePlayerSectionTotal(player, 'lower'));
   const bonusValues = players.map((player) => getUpperBonus(player));
 
   return (
@@ -190,7 +185,7 @@ export const ScoreBoard: FC = () => {
             focusedCategory={focusedCategory}
             onCategoryFocus={handleCategoryFocus}
             isExpanded={isExpanded}
-            isGameEnded={isGameEnded}
+            isGameEnded={hasEnded}
           />
 
           <TotalRow values={upperTotals} players={players.length} hideLabel />
@@ -216,7 +211,7 @@ export const ScoreBoard: FC = () => {
             focusedCategory={focusedCategory}
             onCategoryFocus={handleCategoryFocus}
             isExpanded={isExpanded}
-            isGameEnded={isGameEnded}
+            isGameEnded={hasEnded}
           />
 
           <TotalRow values={lowerTotals} players={players.length} hideLabel />
@@ -226,13 +221,13 @@ export const ScoreBoard: FC = () => {
       <div className="flex gap-3">
         <button
           onClick={handleEndGameClick}
-          className={`flex-1 ${isGameEnded ? 'bg-emerald-500/90 hover:bg-emerald-500' : 'bg-red-500/90 hover:bg-red-500'} 
+          className={`flex-1 ${hasEnded ? 'bg-emerald-500/90 hover:bg-emerald-500' : 'bg-red-500/90 hover:bg-red-500'} 
             text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg 
             transition-all shadow-lg hover:shadow-xl flex items-center justify-center`}>
-          {isGameEnded ? `${t('game.actions.new')} 🎲` : `${t('game.actions.end')} 🏁`}
+          {hasEnded ? `${t('game.actions.new')} 🎲` : `${t('game.actions.end')} 🏁`}
         </button>
 
-        {hasGameHistory() && (
+        {gameHistory.length >= 1 && (
           <button
             onClick={() => setRankingModalOpen(true)}
             className="w-12 sm:w-14 bg-purple-500/90 hover:bg-purple-500 text-white font-semibold h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center">
@@ -248,11 +243,9 @@ export const ScoreBoard: FC = () => {
           playerName={selectedCell ? players.find((p) => p.id === selectedCell.playerId)?.name || '' : ''}
         />
 
-        {winner && (
-          <VictoryModal isOpen={isVictoryModalOpen} onClose={closeVictoryModal} onNewGame={handleNewGame} winner={winner} players={playersWithTotalScores} />
-        )}
+        <VictoryModal isOpen={isVictoryModalOpen} onClose={closeVictoryModal} onNewGame={handleNewGame} />
 
-        <RankingModal isOpen={rankingModalOpen} onClose={() => setRankingModalOpen(false)} gameHistory={gameHistory} currentPlayers={players} />
+        <RankingModal isOpen={rankingModalOpen} onClose={() => setRankingModalOpen(false)} />
 
         <YahtzeeAnimation isActive={isAnimationActive} onComplete={handleAnimationComplete} duration={animationDuration} />
 

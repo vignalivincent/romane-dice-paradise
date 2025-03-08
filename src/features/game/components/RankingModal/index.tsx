@@ -1,109 +1,41 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { GameHistory, Player } from '@/types/game';
+import { useHistory } from '@/features/game/store/gameStore';
 
 interface RankingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  gameHistory: GameHistory[];
-  currentPlayers: Player[];
 }
 
-export const RankingModal: FC<RankingModalProps> = ({
-  isOpen,
-  onClose,
-  gameHistory,
-  currentPlayers,
-}) => {
+export const RankingModal: FC<RankingModalProps> = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
+  const { getSortedPlayerStats } = useHistory();
 
-  // Récupérer les IDs des joueurs actuels
-  const currentPlayerIds = currentPlayers.map(player => player.id);
-
-  // Calculer les statistiques uniquement pour les joueurs actuels
-  const playerStats = gameHistory.reduce((stats, game) => {
-    game.players
-      .filter(player => currentPlayerIds.includes(player.id))
-      .forEach(player => {
-        if (!stats[player.id]) {
-          stats[player.id] = {
-            name: player.name,
-            victories: 0,
-            totalScore: 0,
-            gamesPlayed: 0,
-            averageScore: 0,
-          };
-        }
-        
-        stats[player.id].totalScore += player.score;
-        stats[player.id].gamesPlayed += 1;
-        if (player.id === game.winnerId) {
-          stats[player.id].victories += 1;
-        }
-        stats[player.id].averageScore = Math.round(stats[player.id].totalScore / stats[player.id].gamesPlayed);
-      });
-    return stats;
-  }, {} as Record<string, {
-    name: string;
-    victories: number;
-    totalScore: number;
-    gamesPlayed: number;
-    averageScore: number;
-  }>);
-
-  // S'assurer que tous les joueurs actuels sont inclus, même ceux sans historique
-  currentPlayers.forEach(player => {
-    if (!playerStats[player.id]) {
-      playerStats[player.id] = {
-        name: player.name,
-        victories: 0,
-        totalScore: 0,
-        gamesPlayed: 0,
-        averageScore: 0,
-      };
-    }
-  });
-
-  // Convertir en tableau et trier par nombre de victoires
-  const sortedStats = Object.values(playerStats).sort((a, b) => 
-    b.victories - a.victories || b.averageScore - a.averageScore
-  );
+  const playerStats = getSortedPlayerStats();
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent fullWidth className="space-y-6">
-        <DialogTitle className="sr-only">
-          {t('ranking.title')}
-        </DialogTitle>
+      <DialogContent className="space-y-6 w-[90vw] max-w-[400px]">
+        <DialogTitle className="sr-only">{t('ranking.title')}</DialogTitle>
         <div className="text-center space-y-4">
           <div className="text-4xl">🏆</div>
-          <h2 className="text-2xl font-bold text-purple-900">
-            {t('ranking.title')}
-          </h2>
+          <h2 className="text-xl font-bold text-purple-900">{t('ranking.title')}</h2>
         </div>
 
-        <div className="space-y-4">
-          {sortedStats.map((stats, index) => (
-            <div
-              key={stats.name}
-              className="p-4 rounded-lg bg-purple-50 space-y-2"
-            >
+        <div className="space-y-3 max-h-[60vh] overflow-y-auto">
+          {playerStats.map((stats, index) => (
+            <div key={stats.name} className="p-3 rounded-lg bg-purple-50 space-y-1">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">
-                    {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
-                  </span>
-                  <span className="font-bold text-lg text-purple-900">
-                    {stats.name}
-                  </span>
+                  <span className="text-lg">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}</span>
+                  <span className="font-semibold text-purple-900">{stats.name}</span>
                 </div>
                 <span className="font-medium text-purple-700">
-                  {stats.victories} {t('ranking.victories')}
+                  {stats.wins} {t('ranking.victories')}
                 </span>
               </div>
-              
-              <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className="space-y-1 text-sm">
                 <div className="text-purple-600">
                   {t('ranking.gamesPlayed')}: <span className="font-medium">{stats.gamesPlayed}</span>
                 </div>
@@ -113,15 +45,14 @@ export const RankingModal: FC<RankingModalProps> = ({
               </div>
             </div>
           ))}
+
+          {playerStats.length === 0 && <div className="text-center text-gray-500 py-4">{t('ranking.noGamesPlayed')}</div>}
         </div>
 
-        <button
-          onClick={onClose}
-          className="w-full bg-purple-100 hover:bg-purple-200 text-purple-900 font-bold py-3 rounded-xl transition-colors"
-        >
+        <button onClick={onClose} className="w-full bg-purple-100 hover:bg-purple-200 text-purple-900 font-bold py-3 rounded-xl transition-colors">
           {t('common.close')}
         </button>
       </DialogContent>
     </Dialog>
   );
-}; 
+};

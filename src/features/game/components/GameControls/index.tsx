@@ -1,16 +1,17 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGameStore } from '../../store/gameStore';
+import { usePlayers } from '../../store/gameStore';
+import { useGame } from '../../store/gameStore';
 
 export const GameControls: FC = () => {
   const { t } = useTranslation();
-  const { players, isStarted, startGame } = useGameStore();
+  const { players } = usePlayers();
+  const { hasStarted, doStartGame } = useGame();
 
-  // Ensure this function only triggers state updates once
   const handleStartGame = () => {
     if (players.length < 2) return;
-    if (!isStarted) {
-      startGame();
+    if (!hasStarted) {
+      doStartGame();
     }
   };
 
@@ -23,10 +24,10 @@ export const GameControls: FC = () => {
       ) : (
         <button
           onClick={handleStartGame}
-          disabled={isStarted}
+          disabled={hasStarted}
           className={`
             w-full py-3 rounded-lg font-bold text-lg
-            ${isStarted ? 'bg-gray-500/50 cursor-not-allowed text-white/50' : 'bg-purple-500 hover:bg-purple-600 text-white'}
+            ${hasStarted ? 'bg-gray-500/50 cursor-not-allowed text-white/50' : 'bg-purple-500 hover:bg-purple-600 text-white'}
           `}>
           {t('game.controls.start')}
         </button>

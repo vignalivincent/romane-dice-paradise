@@ -12,22 +12,18 @@ export interface ScoresSlice {
   getUpperBonus: (player: Player) => number;
   getLeadingPlayer: () => Player;
   getScoreStyle: (score: ScoreState | undefined, maxScore: number) => string;
-  getPlayersWithTotalScores: () => Array<{ name: string; score: number }>;
 }
 
-// Define what we need from other slices
 interface ScoreSliceWithDepencies extends ScoresSlice {
   players: Player[];
 }
 
-// Helper to get numeric value from score state
 const getScoreValue = (score: ScoreState | undefined): number => {
   if (score === undefined) return 0;
   if (score === 'crossed') return 0;
   return score;
 };
 
-// Changed the StateCreator type to correctly include dependencies
 export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], ScoresSlice> = (_, get) => ({
   getMaxScore: (category) => {
     switch (category) {
@@ -118,13 +114,5 @@ export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], Sc
     } else {
       return 'bg-green-50';
     }
-  },
-
-  getPlayersWithTotalScores: () => {
-    const { players } = get();
-    return players.map((player) => ({
-      name: player.name,
-      score: get().calculateTotal(player),
-    }));
   },
 });
