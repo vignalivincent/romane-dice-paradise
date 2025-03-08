@@ -14,6 +14,7 @@ import { SCORE_CATEGORIES } from '../../constants/categories';
 import { TOAST_MESSAGES } from '../../constants/toastMessages';
 import { useToast } from '@/components/ui/use-toast';
 import { ScoreCategoryUI } from '../../constants/categories';
+import { useYahtzeeAnimation } from '../../hooks/useYahtzeeAnimation';
 
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
@@ -32,6 +33,7 @@ export const ScoreBoard: FC = () => {
     getMaxScore,
   } = useGameStore();
 
+  const { playAnimation } = useYahtzeeAnimation();
   const [selectedCell, setSelectedCell] = useState<{
     playerId: string;
     category: ScoreCategory;
@@ -126,7 +128,11 @@ export const ScoreBoard: FC = () => {
 
     updatePlayerScore(playerId, category, score);
 
-    if (typeof score === 'number' && score === maxScore && player) {
+    if (category === 'yahtzee' && score === maxScore && player) {
+      playAnimation();
+    }
+
+    if (score === maxScore && player) {
       toast({
         variant: TOAST_MESSAGES.maxScore.variant,
         title: t(TOAST_MESSAGES.maxScore.title),
