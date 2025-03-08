@@ -2,7 +2,7 @@ import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
 import { useVictory } from '../../hooks/useVictory';
-import { ScoreCategory } from '@/types/game';
+import { ScoreCategory, ScoreState } from '@/types/game';
 import { ScoreModal } from '../ScoreModal';
 import { VictoryModal } from '../VictoryModal';
 import { RankingModal } from '../RankingModal';
@@ -107,8 +107,8 @@ export const ScoreBoard: FC = () => {
     if (isGameEnded) {
       toast({
         variant: TOAST_MESSAGES.gameEnded.variant,
-        title: TOAST_MESSAGES.gameEnded.title,
-        description: TOAST_MESSAGES.gameEnded.description,
+        title: t(TOAST_MESSAGES.gameEnded.title),
+        description: t(TOAST_MESSAGES.gameEnded.description),
       });
       return;
     }
@@ -118,7 +118,7 @@ export const ScoreBoard: FC = () => {
     setModalOpen(true);
   };
 
-  const handleScoreSelect = (score: number) => {
+  const handleScoreUpdate = (score: ScoreState) => {
     if (!selectedCell) return;
     const { playerId, category } = selectedCell;
     const player = players.find((p) => p.id === playerId);
@@ -126,18 +126,18 @@ export const ScoreBoard: FC = () => {
 
     updatePlayerScore(playerId, category, score);
 
-    if (score === maxScore && player) {
+    if (typeof score === 'number' && score === maxScore && player) {
       toast({
         variant: TOAST_MESSAGES.maxScore.variant,
-        title: TOAST_MESSAGES.maxScore.title,
-        description: TOAST_MESSAGES.maxScore.description(player.name),
+        title: t(TOAST_MESSAGES.maxScore.title),
+        description: t(TOAST_MESSAGES.maxScore.description, { name: player.name }),
         className: TOAST_MESSAGES.maxScore.className,
       });
-    } else if (score === 0 && player) {
+    } else if (score === 'crossed' && player) {
       toast({
         variant: TOAST_MESSAGES.zeroScore.variant,
-        title: TOAST_MESSAGES.zeroScore.title,
-        description: TOAST_MESSAGES.zeroScore.description(player.name),
+        title: t(TOAST_MESSAGES.zeroScore.title),
+        description: t(TOAST_MESSAGES.zeroScore.description, { name: player.name }),
         className: TOAST_MESSAGES.zeroScore.className,
       });
     }
@@ -238,7 +238,7 @@ export const ScoreBoard: FC = () => {
         <ScoreModal
           isOpen={modalOpen}
           onClose={handleModalClose}
-          onSelect={handleScoreSelect}
+          onScoreUpdate={handleScoreUpdate}
           category={selectedCell ? SCORE_CATEGORIES.find((c) => c.id === selectedCell.category)! : SCORE_CATEGORIES[0]}
           playerName={selectedCell ? players.find((p) => p.id === selectedCell.playerId)?.name || '' : ''}
         />

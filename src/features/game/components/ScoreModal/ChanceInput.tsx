@@ -5,22 +5,17 @@ interface ChanceInputProps {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
-  onBarrer: () => void;
+  onReset: () => void;
 }
 
-export const ChanceInput: FC<ChanceInputProps> = ({
-  value,
-  onChange,
-  onSubmit,
-  onBarrer,
-}) => {
+export const ChanceInput: FC<ChanceInputProps> = ({ value, onChange, onSubmit, onReset }) => {
   const { t } = useTranslation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     // Ne permet que les chiffres
     if (!/^\d*$/.test(value)) return;
-    
+
     // Convertit en nombre et vérifie les limites
     const numValue = parseInt(value);
     if (value === '' || (numValue >= 1 && numValue <= 30)) {
@@ -46,17 +41,15 @@ export const ChanceInput: FC<ChanceInputProps> = ({
         <button
           onClick={onSubmit}
           disabled={!value || parseInt(value) < 1 || parseInt(value) > 30}
-          className="w-full bg-purple-100 hover:bg-purple-200 disabled:opacity-50 disabled:cursor-not-allowed text-purple-900 font-bold py-4 rounded-xl transition-colors text-xl shadow-sm hover:shadow-md"
-        >
+          className="w-full bg-purple-100 hover:bg-purple-200 disabled:opacity-50 disabled:cursor-not-allowed text-purple-900 font-bold py-4 rounded-xl transition-colors text-xl shadow-sm hover:shadow-md">
           {t('scoreModal.chance.validate')}
         </button>
         <button
-          onClick={onBarrer}
-          className="w-full bg-red-100 hover:bg-red-200 text-red-900 font-bold py-4 rounded-xl transition-colors text-xl shadow-sm hover:shadow-md"
-        >
-          {t('scoreModal.common.cancel')}
+          onClick={onReset}
+          className="w-full bg-purple-100 hover:bg-purple-200 text-purple-900 font-bold py-4 rounded-xl transition-colors text-xl shadow-sm hover:shadow-md">
+          {t('scoreModal.common.reset')}
         </button>
       </div>
     </div>
   );
-}; 
+};

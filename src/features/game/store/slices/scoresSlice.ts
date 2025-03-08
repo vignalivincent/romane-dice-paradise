@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand';
-import { Player, ScoreCategory } from '@/types/game';
+import { Player, ScoreCategory, ScoreState } from '@/types/game';
 
 // Constants
 const UPPER_BONUS_THRESHOLD = 62;
@@ -11,7 +11,7 @@ export interface ScoresSlice {
   calculateTotal: (player: Player) => number;
   getUpperBonus: (player: Player) => number;
   getLeadingPlayer: () => Player;
-  getScoreStyle: (score: number | undefined, maxScore: number) => string;
+  getScoreStyle: (score: ScoreState | undefined, maxScore: number) => string;
   getPlayersWithTotalScores: () => Array<{ name: string; score: number }>;
 }
 
@@ -19,6 +19,13 @@ export interface ScoresSlice {
 interface ScoreSliceWithDepencies extends ScoresSlice {
   players: Player[];
 }
+
+// Helper to get numeric value from score state
+const getScoreValue = (score: ScoreState | undefined): number => {
+  if (score === undefined) return 0;
+  if (score === 'crossed') return 0;
+  return score;
+};
 
 // Changed the StateCreator type to correctly include dependencies
 export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], ScoresSlice> = (_, get) => ({
@@ -63,17 +70,13 @@ export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], Sc
       return !['ones', 'twos', 'threes', 'fours', 'fives', 'sixes'].includes(category);
     });
 
-    return categories.reduce((sum, [, score]) => sum + (score || 0), 0);
+    return categories.reduce((sum, [, score]) => sum + getScoreValue(score), 0);
   },
 
   calculateTotal: (player) => {
     const upperTotal = get().calculateSectionTotal(player, 'upper');
     const lowerTotal = get().calculateSectionTotal(player, 'lower');
-    console.log('upperTotal', upperTotal);
-    console.log('lowerTotal', lowerTotal);
     const bonus = get().getUpperBonus(player);
-    console.log('bonus', bonus);
-    console.log(upperTotal + lowerTotal + bonus);
     return upperTotal + lowerTotal + bonus;
   },
 
@@ -94,6 +97,11 @@ export const createScoresSlice: StateCreator<ScoreSliceWithDepencies, [], [], Sc
 
   getScoreStyle: (score, maxScore) => {
     if (score === undefined) return 'bg-transparent';
+
+    // Crossed out score: pale red with cross pattern
+    if (score === 'crossed') {
+      return 'text-red-500 font-bold text-xl bg-transparent ';
+    }
 
     // Score of 0 : pale red
     if (score === 0) {

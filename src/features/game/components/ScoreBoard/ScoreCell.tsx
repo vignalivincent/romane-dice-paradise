@@ -16,6 +16,12 @@ export const ScoreCell: FC<ScoreCellProps> = ({ category, player, onSelect, shou
   const score = player.scores[category.id];
   const maxScore = getMaxScore(category.id);
 
+  const renderScoreDisplay = () => {
+    if (score === undefined) return '-';
+    if (score === 'crossed') return '✕';
+    return score;
+  };
+
   return (
     <button
       onClick={() => onSelect(player.id, category.id)}
@@ -27,7 +33,7 @@ export const ScoreCell: FC<ScoreCellProps> = ({ category, player, onSelect, shou
         ${isGameEnded ? 'cursor-default' : 'hover:bg-opacity-75'} 
         text-purple-900
       `}>
-      {score ?? '-'}
+      {renderScoreDisplay()}
     </button>
   );
 };

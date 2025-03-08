@@ -13,10 +13,12 @@ export type ScoreCategory =
   | 'yahtzee'
   | 'chance';
 
+export type ScoreState = number | 'crossed' | undefined;
+
 export interface Player {
   id: string;
   name: string;
-  scores: Partial<Record<ScoreCategory, number>>;
+  scores: Partial<Record<ScoreCategory, ScoreState>>;
 }
 
 export interface PlayerScore {
