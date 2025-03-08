@@ -11,12 +11,13 @@ interface ScoreSectionProps {
   focusedCategory: ScoreCategoryUI | null;
   onCategoryFocus: (category: ScoreCategoryUI) => void;
   isExpanded: boolean;
+  isGameEnded?: boolean;
 }
 
-export const ScoreSection: FC<ScoreSectionProps> = ({ categories, players, onSelect, focusedCategory, onCategoryFocus, isExpanded }) => {
+export const ScoreSection: FC<ScoreSectionProps> = ({ categories, players, onSelect, focusedCategory, onCategoryFocus, isExpanded, isGameEnded = false }) => {
   const getCategoryTopOffset = (index: number) => {
-    const cellHeight = 48; // h-12 in pixels
-    const gap = 6; // space-y-1.5 in pixels
+    const cellHeight = 48;
+    const gap = 6;
     return `${index * (cellHeight + gap)}px`;
   };
 
@@ -27,7 +28,6 @@ export const ScoreSection: FC<ScoreSectionProps> = ({ categories, players, onSel
         style={{
           gridTemplateColumns: '44px minmax(0, 1fr)',
         }}>
-        {/* Catégories */}
         <div className="space-y-1.5 relative">
           {categories.map((category, index) => (
             <div key={category.id} style={{ height: '48px' }}>
@@ -51,7 +51,6 @@ export const ScoreSection: FC<ScoreSectionProps> = ({ categories, players, onSel
           ))}
         </div>
 
-        {/* Scores */}
         <div
           className="grid gap-x-1 w-full"
           style={{
@@ -60,7 +59,7 @@ export const ScoreSection: FC<ScoreSectionProps> = ({ categories, players, onSel
           {players.map((player) => (
             <div key={player.id} className="space-y-1.5 min-w-0">
               {categories.map((category) => (
-                <ScoreCell key={category.id} player={player} category={category} onSelect={onSelect} />
+                <ScoreCell key={category.id} player={player} category={category} onSelect={onSelect} isGameEnded={isGameEnded} />
               ))}
             </div>
           ))}

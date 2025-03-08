@@ -1,5 +1,4 @@
-// Scoreboard component - Updated for Vercel preview
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
 import { useVictory } from '../../hooks/useVictory';
@@ -12,13 +11,26 @@ import { PlayersHeader } from './PlayersHeader';
 import { ScoreSection } from './ScoreSection';
 import { TotalRow } from './TotalRow';
 import { SCORE_CATEGORIES } from '../../constants/categories';
+import { TOAST_MESSAGES } from '../../constants/toastMessages';
 import { useToast } from '@/components/ui/use-toast';
 import { ScoreCategoryUI } from '../../constants/categories';
 
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { players, isStarted, gameHistory, hasGameHistory, updatePlayerScore, endGame, calculateSectionTotal, getUpperBonus, getMaxScore } = useGameStore();
+  const {
+    players,
+    isStarted,
+    isGameEnded,
+    gameHistory,
+    hasGameHistory,
+    updatePlayerScore,
+    endGame,
+    resetGame,
+    calculateSectionTotal,
+    getUpperBonus,
+    getMaxScore,
+  } = useGameStore();
 
   const [selectedCell, setSelectedCell] = useState<{
     playerId: string;
@@ -46,10 +58,30 @@ export const ScoreBoard: FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [focusedCategory, isBonusExpanded]);
 
-  const { isVictoryModalOpen, winner, playersWithTotalScores, closeVictoryModal } = useVictory({
-    players,
-    onNewGame: endGame,
+  const isGameCompleteDirect = useGameStore((state) => state.isGameComplete());
+
+  const { isVictoryModalOpen, winner, playersWithTotalScores, closeVictoryModal, handleNewGame } = useVictory({
+    onReset: resetGame,
+    isGameEnded,
   });
+
+  const hasEndedGame = useRef(false);
+  const prevGameComplete = useRef(isGameCompleteDirect);
+
+  useEffect(() => {
+    if (isGameCompleteDirect !== prevGameComplete.current) {
+      prevGameComplete.current = isGameCompleteDirect;
+
+      if (isGameCompleteDirect && !isGameEnded && !hasEndedGame.current) {
+        hasEndedGame.current = true;
+        setTimeout(() => {
+          endGame();
+        }, 0);
+      } else if (!isGameCompleteDirect) {
+        hasEndedGame.current = false;
+      }
+    }
+  }, [isGameCompleteDirect, isGameEnded, endGame]);
 
   if (!isStarted || players.length === 0) return null;
 
@@ -72,6 +104,15 @@ export const ScoreBoard: FC = () => {
   };
 
   const handleCellClick = (playerId: string, category: ScoreCategory) => {
+    if (isGameEnded) {
+      toast({
+        variant: TOAST_MESSAGES.gameEnded.variant,
+        title: TOAST_MESSAGES.gameEnded.title,
+        description: TOAST_MESSAGES.gameEnded.description,
+      });
+      return;
+    }
+
     if (!isStarted) return;
     setSelectedCell({ playerId, category });
     setModalOpen(true);
@@ -87,17 +128,17 @@ export const ScoreBoard: FC = () => {
 
     if (score === maxScore && player) {
       toast({
-        variant: 'success',
-        title: '🍾 Tu me fais rêver !',
-        description: `${player.name}, j'ai toujours cru en toi ! Rendez-vous au sommet.`,
-        className: 'text-xl font-bold',
+        variant: TOAST_MESSAGES.maxScore.variant,
+        title: TOAST_MESSAGES.maxScore.title,
+        description: TOAST_MESSAGES.maxScore.description(player.name),
+        className: TOAST_MESSAGES.maxScore.className,
       });
     } else if (score === 0 && player) {
       toast({
-        variant: 'destructive',
-        title: '💩 Aïe aïe aïe...',
-        description: `${player.name}, toi il va falloir te reprendre ! Ne gâche plus ton potentiel comme ça.`,
-        className: 'text-xl font-bold',
+        variant: TOAST_MESSAGES.zeroScore.variant,
+        title: TOAST_MESSAGES.zeroScore.title,
+        description: TOAST_MESSAGES.zeroScore.description(player.name),
+        className: TOAST_MESSAGES.zeroScore.className,
       });
     }
 
@@ -111,6 +152,11 @@ export const ScoreBoard: FC = () => {
   };
 
   const handleEndGameClick = () => {
+    if (isGameEnded) {
+      resetGame();
+      return;
+    }
+
     setConfirmEndGameOpen(true);
   };
 
@@ -131,7 +177,6 @@ export const ScoreBoard: FC = () => {
       <div className="space-y-1.5">
         <PlayersHeader isExpanded={isExpanded} onToggleExpand={handleToggleExpand} />
 
-        {/* Section supérieure */}
         <div className="space-y-1.5">
           <ScoreSection
             categories={upperCategories}
@@ -140,6 +185,7 @@ export const ScoreBoard: FC = () => {
             focusedCategory={focusedCategory}
             onCategoryFocus={handleCategoryFocus}
             isExpanded={isExpanded}
+            isGameEnded={isGameEnded}
           />
 
           <TotalRow values={upperTotals} players={players.length} hideLabel />
@@ -157,7 +203,6 @@ export const ScoreBoard: FC = () => {
           </div>
         </div>
 
-        {/* Section inférieure */}
         <div className="space-y-1.5">
           <ScoreSection
             categories={lowerCategories}
@@ -166,18 +211,20 @@ export const ScoreBoard: FC = () => {
             focusedCategory={focusedCategory}
             onCategoryFocus={handleCategoryFocus}
             isExpanded={isExpanded}
+            isGameEnded={isGameEnded}
           />
 
           <TotalRow values={lowerTotals} players={players.length} hideLabel />
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex gap-3">
         <button
           onClick={handleEndGameClick}
-          className="flex-1 bg-red-500/90 hover:bg-red-500 text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center">
-          {t('game.actions.end')} 🏁
+          className={`flex-1 ${isGameEnded ? 'bg-emerald-500/90 hover:bg-emerald-500' : 'bg-red-500/90 hover:bg-red-500'} 
+            text-white font-semibold text-sm lg:text-base h-12 sm:h-14 rounded-lg 
+            transition-all shadow-lg hover:shadow-xl flex items-center justify-center`}>
+          {isGameEnded ? `${t('game.actions.new')} 🎲` : `${t('game.actions.end')} 🏁`}
         </button>
 
         {hasGameHistory() && (
@@ -187,21 +234,23 @@ export const ScoreBoard: FC = () => {
             🏆
           </button>
         )}
+
+        <ScoreModal
+          isOpen={modalOpen}
+          onClose={handleModalClose}
+          onSelect={handleScoreSelect}
+          category={selectedCell ? SCORE_CATEGORIES.find((c) => c.id === selectedCell.category)! : SCORE_CATEGORIES[0]}
+          playerName={selectedCell ? players.find((p) => p.id === selectedCell.playerId)?.name || '' : ''}
+        />
+
+        {winner && (
+          <VictoryModal isOpen={isVictoryModalOpen} onClose={closeVictoryModal} onNewGame={handleNewGame} winner={winner} players={playersWithTotalScores} />
+        )}
+
+        <RankingModal isOpen={rankingModalOpen} onClose={() => setRankingModalOpen(false)} gameHistory={gameHistory} currentPlayers={players} />
+
+        <ConfirmEndGameModal isOpen={confirmEndGameOpen} onClose={() => setConfirmEndGameOpen(false)} onConfirm={handleEndGameConfirm} />
       </div>
-
-      <ScoreModal
-        isOpen={modalOpen}
-        onClose={handleModalClose}
-        onSelect={handleScoreSelect}
-        category={selectedCell ? SCORE_CATEGORIES.find((c) => c.id === selectedCell.category)! : SCORE_CATEGORIES[0]}
-        playerName={selectedCell ? players.find((p) => p.id === selectedCell.playerId)?.name || '' : ''}
-      />
-
-      <VictoryModal isOpen={isVictoryModalOpen} onClose={closeVictoryModal} winner={winner!} players={playersWithTotalScores} />
-
-      <RankingModal isOpen={rankingModalOpen} onClose={() => setRankingModalOpen(false)} gameHistory={gameHistory} currentPlayers={players} />
-
-      <ConfirmEndGameModal isOpen={confirmEndGameOpen} onClose={() => setConfirmEndGameOpen(false)} onConfirm={handleEndGameConfirm} />
     </div>
   );
 };
