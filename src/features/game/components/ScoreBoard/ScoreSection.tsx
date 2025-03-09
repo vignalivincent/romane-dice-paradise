@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { Player } from '@/types/game';
-import { ScoreCategoryUI } from '../../constants/categories';
+import { Player, ScoreCategoryUI } from '@/types/game';
 import { CategoryCell } from './CategoryCell';
 import { ScoreCell } from './ScoreCell';
 

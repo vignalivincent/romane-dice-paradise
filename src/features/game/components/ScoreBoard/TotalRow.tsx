@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { CategoryCell } from './CategoryCell';
-import { SectionEnum } from '@/types/game';
+import { SCORE_CATEGORIES } from '../../constants/categories';
 
 interface TotalRowProps {
   label?: string;
@@ -26,14 +26,7 @@ export const TotalRow: FC<TotalRowProps> = ({
   onToggleExpand,
 }) => {
   if (isBonus) {
-    const bonusCategory = {
-      id: 'bonus',
-      name: 'Bonus (+35pts)',
-      description: 'Au dela de 62 points ci dessus.',
-      icon: '🤑',
-      color: 'from-emerald-400/10 to-emerald-500/10',
-      section: SectionEnum.upper,
-    };
+    const bonusCategory = SCORE_CATEGORIES.find((cat) => cat.id === 'bonus')!;
 
     return (
       <div className="grid gap-x-2" style={{ gridTemplateColumns: '44px minmax(0, 1fr)' }}>
