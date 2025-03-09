@@ -5,6 +5,8 @@
 
 YamsAttack est un jeu de Yams (Yahtzee) en ligne gratuit avec une interface moderne et responsive, permettant de jouer jusqu'à 6 joueurs. Lancez les dés, choisissez vos combinaisons et amusez-vous avec ce jeu de société intemporel! 🌟
 
+> **Note:** Ce projet est connu sous le nom "romane-dice-paradise" en local mais "yamsAttack" sur le dépôt distant.
+
 ## 🔗 Liens
 
 - **Production** : [yamsattack.vercel.app](https://yamsattack.vercel.app)
@@ -76,7 +78,10 @@ yarn format
 
 ```bash
 # Cloner le projet
-git clone https://github.com/vignaliVincent/yamsAttack.git
+git clone https://github.com/vignalivincent/yamsAttack.git
+
+# Se déplacer dans le dossier (nom local peut être différent)
+cd yamsAttack  # ou cd romane-dice-paradise selon votre configuration
 
 # Installer les dépendances
 yarn install
@@ -105,6 +110,67 @@ Les contributions sont les bienvenues ! Assurez-vous de :
 3. Commiter vos changements (suivre la convention [Conventional Commits](https://www.conventionalcommits.org/))
 4. Pousser vers la branche
 5. Ouvrir une Pull Request
+
+## 🤝 Contribution avec Docker (Flux recommandé)
+
+Le moyen le plus simple de contribuer au projet est d'utiliser Docker, qui garantit un environnement de développement cohérent pour tous.
+
+### Étapes simples pour contribuer
+
+1. **Cloner le dépôt**
+
+   ```bash
+   git clone https://github.com/vignalivincent/yamsAttack.git
+   cd yamsAttack  # ou le nom du dossier local si différent
+   ```
+
+2. **Lancer avec Docker (une seule commande)**
+
+   ```bash
+   make up
+   ```
+
+   C'est tout ! L'application est maintenant accessible sur <http://localhost:3000>
+
+3. **Développer**
+
+   - Modifiez les fichiers source dans votre éditeur préféré
+   - Les changements sont automatiquement détectés (hot reload)
+   - Les fichiers sont synchronisés entre votre machine et le conteneur Docker
+
+4. **Tester vos changements**
+
+   ```bash
+   make test
+   ```
+
+5. **Arrêter l'environnement quand vous avez terminé**
+
+   ```bash
+   make down
+   ```
+
+### Commandes Make utiles
+
+```bash
+# Voir les commandes disponibles
+make help
+
+# Voir les logs en temps réel
+make logs
+
+# Exécuter le linter
+make lint
+
+# Ouvrir un terminal dans le conteneur
+make sh
+
+# Construire l'application
+make build
+
+# Nettoyer l'environnement Docker
+make clean
+```
 
 ## 📝 Convention de Commit
 
@@ -136,38 +202,35 @@ Types disponibles :
 
 MIT
 
-## 🐳 Docker
+## 🐳 Docker (Recommandé pour le développement)
 
-### Développement
+Docker fournit un environnement de développement cohérent pour tous les contributeurs.
 
-Pour lancer l'application en mode développement avec Docker :
-
-```bash
-# Construire et démarrer le conteneur
-docker compose up -d
-
-# Voir les logs
-docker compose logs -f
-
-# Arrêter le conteneur
-docker compose down
-```
-
-### Production
-
-Pour construire et lancer l'application en production :
+### Démarrage rapide avec Docker et Make
 
 ```bash
-# Construire l'image
-docker build -t yamsattack .
-
-# Lancer le conteneur
-docker run -d -p 80:80 yamsattack
+# Cloner et lancer en deux commandes
+git clone https://github.com/vignalivincent/yamsAttack.git
+cd yamsAttack
+make up
 ```
+
+Accédez à l'application sur <http://localhost:3000>
 
 ## 📋 Informations sur le Repository
 
-Ce projet était précédemment connu sous le nom "romane-dice-paradice" et a été renommé "yamsAttack".
+Ce projet est connu sous deux noms:
+
+- **Nom local**: "romane-dice-paradise"
+- **Nom distant** (GitHub): "yamsAttack"
+
+Cette différence est due à un renommage du projet. Les deux noms font référence au même projet.
+
+Pour les commandes Git, utilisez toujours l'URL distante:
+
+````bash
+git remote -v  # Vérifier l'URL du dépôt distant
+git push origin main  # Pousser vers le dépôt distant "yamsAttack"
 
 ## 📱 Compatibilité
 
@@ -193,3 +256,112 @@ Le Yams se joue avec 5 dés et une feuille de score. À votre tour:
 - Calcul automatique des scores
 - Pas d'inscription nécessaire
 - Fonctionne même hors ligne après chargement
+
+# Romane's Dice Paradise
+
+Welcome to Romane's Dice Paradise - a dice game application!
+
+## Table of Contents
+- [Getting Started](#getting-started)
+  - [Using Docker (Recommended)](#using-docker-recommended)
+  - [Manual Setup](#manual-setup)
+- [Development](#development)
+- [Testing](#testing)
+- [Commit Guidelines](#commit-guidelines)
+
+## Getting Started
+
+### Using Docker (Recommended)
+
+Docker provides a consistent development environment for all contributors. To get started with Docker:
+
+1. **Prerequisites**
+   - [Docker](https://www.docker.com/get-started)
+   - [Docker Compose](https://docs.docker.com/compose/install/)
+
+2. **Setup**
+   ```bash
+   # Clone the repository
+   git clone https://github.com/yourusername/romane-dice-paradise.git
+   cd romane-dice-paradise
+
+   # Build and start the containers
+   docker-compose up -d
+````
+
+3. **Access the Application**
+
+   - The app will be available at <http://localhost:3000> (or your configured port)
+
+4. **Running Commands Inside the Container**
+
+   ```bash
+   # Execute commands in the running container
+   docker exec -it romane-dice-paradise npm run test
+
+   # Or start a shell in the container
+   docker exec -it romane-dice-paradise sh
+   ```
+
+### Manual Setup
+
+If you prefer not to use Docker:
+
+1. **Prerequisites**
+
+   - Node.js (version specified in package.json)
+   - npm or yarn
+
+2. **Installation**
+
+   ```bash
+   # Clone the repository
+   git clone https://github.com/yourusername/romane-dice-paradise.git
+   cd romane-dice-paradise
+
+   # Install dependencies
+   npm install
+   ```
+
+3. **Start Development Server**
+
+   ```bash
+   npm run dev
+   ```
+
+## Development
+
+The project uses a pre-commit hook system to ensure code quality. When developing:
+
+```bash
+# Install husky hooks (automatically done on npm install)
+npm run prepare
+```
+
+## Testing
+
+```bash
+# Using Docker
+docker exec -it romane-dice-paradise npm run test
+
+# Or manually
+npm run test
+```
+
+## Commit Guidelines
+
+This project follows specific commit message conventions enforced by husky:
+
+Format: `[emoji] type(scope): description`
+
+Allowed emojis and types:
+
+- ✨ sparkles : New feature (feat)
+- 🐛 bug : Bug fix (fix)
+- 📝 memo : Documentation (docs)
+- ♻️ recycle : Refactoring (refactor)
+- ✅ check : Tests (test)
+- 🧹 broom : Cleaning/Refactoring (refactor)
+- 🔧 wrench : Configuration/Maintenance (chore)
+
+Example: `✨ feat(auth): add login page`
