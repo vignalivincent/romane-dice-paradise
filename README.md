@@ -1,4 +1,4 @@
-# Romane Dice Paradise 🎲
+# YamsAttack 🎲
 
 [![Vercel Production Deployment](https://img.shields.io/badge/vercel-production-blue)](https://romane-dice-paradise.vercel.app)
 [![GitHub Actions CI](https://github.com/vignalivincent/romane-dice-paradise/actions/workflows/ci.yml/badge.svg)](https://github.com/vignalivincent/romane-dice-paradise/actions/workflows/ci.yml)
@@ -110,6 +110,7 @@ type(scope): description
 ```
 
 Types disponibles :
+
 - `feat` : Nouvelle fonctionnalité
 - `fix` : Correction de bug
 - `docs` : Documentation
@@ -154,3 +155,7 @@ docker build -t romane-dice-paradise .
 # Lancer le conteneur
 docker run -d -p 80:80 romane-dice-paradise
 ```
+
+## Repository Information
+
+This project was formerly known as "romane-dice-paradice" and has been renamed to "yamsAttack".
