@@ -59,7 +59,6 @@ export const useScoreModal = ({ isOpen, onClose, category, player, onYahtzee }: 
       variant: TOAST_MESSAGES.zeroScore.variant,
       title: t(TOAST_MESSAGES.zeroScore.title),
       description: t(TOAST_MESSAGES.zeroScore.description, { name: player.name }),
-      className: TOAST_MESSAGES.zeroScore.className,
     });
     onClose();
   };
@@ -71,14 +70,12 @@ export const useScoreModal = ({ isOpen, onClose, category, player, onYahtzee }: 
         variant: TOAST_MESSAGES.maxScore.variant,
         title: t(TOAST_MESSAGES.maxScore.title),
         description: t(TOAST_MESSAGES.maxScore.description, { name: player.name }),
-        className: TOAST_MESSAGES.maxScore.className,
       });
     }
     if (category === 'yahtzee') {
       toast({
         variant: TOAST_MESSAGES.yahtzee.variant,
         description: t(TOAST_MESSAGES.yahtzee.description, { name: player.name }),
-        className: TOAST_MESSAGES.yahtzee.className,
       });
       onYahtzee();
     }
