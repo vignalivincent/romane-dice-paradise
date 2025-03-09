@@ -16,11 +16,11 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({ isExpanded, onToggleExpa
   const leaderboard = getLeaderBoard();
   const leadingPlayerId = leaderboard[0].id;
   const hasScrolled = useScrollDetection();
-
-  const shouldTruncate = players.length >= 5;
   const truncateName = (name: string): string => {
-    if (shouldTruncate) {
-      return name.length > 5 ? `${name.slice(0, 5)}.` : name;
+    if (players.length >= 5) {
+      return name.length > 5 ? `${name.slice(0, 6)}.` : name;
+    } else if (players.length === 4) {
+      return name.length > 6 ? `${name.slice(0, 7)}.` : name;
     }
     return name;
   };
