@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,10 +17,11 @@ export default defineConfig({
     watch: {
       usePolling: true, // Nécessaire pour le hot reload dans Docker
     },
+    open: true,
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
-    chunkSizeWarningLimit: 1000, // Augmente la limite d'avertissement de taille des chunks
+    chunkSizeWarningLimit: 1000,
   },
-})
+});
