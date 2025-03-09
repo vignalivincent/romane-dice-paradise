@@ -1,4 +1,4 @@
-.PHONY: help docker-up docker-down docker-logs docker-build docker-prod clean install dev build docker-build-cached docker-up-logs
+.PHONY: help up up-logs down logs sh test lint build clean install dev
 
 # Colors
 GREEN  := $(shell tput -Txterm setaf 2)
@@ -25,40 +25,68 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
+	@echo ""
+	@echo "Docker Development Commands (Shortcuts)"
+	@echo "-------------------------------------"
+	@echo "make up         - Start Docker environment"
+	@echo "make up-logs    - Start Docker with logs"
+	@echo "make down       - Stop Docker environment"
+	@echo "make logs       - Show logs"
+	@echo "make sh         - Open shell in container"
+	@echo "make test       - Run tests"
+	@echo "make lint       - Run linter"
+	@echo "make build      - Build the application"
+	@echo "make clean      - Clean Docker environment"
+
 ## Lance le projet en mode développement avec Docker (sans logs)
-docker-up:
+up:
 	@echo "🚀 Lancement du projet en mode développement..."
 	DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker compose up -d --build
-	@echo "📱 Application disponible sur http://localhost:5173"
+	@echo "📱 Application disponible sur http://localhost:3000"
 
 ## Lance le projet et affiche les logs
-docker-up-logs:
-	@echo "🚀 Lancement du projet en mode développement..."
+up-logs:
+	@echo "🚀 Lancement du projet en mode développement avec logs..."
 	DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker compose up --build
 
 ## Arrête les conteneurs Docker
-docker-down:
+down:
 	@echo "🛑 Arrêt des conteneurs..."
 	docker compose down
 
 ## Affiche les logs des conteneurs
-docker-logs:
+logs:
 	@echo "📋 Affichage des logs..."
 	docker compose logs -f
 
-## Construit l'image Docker de production avec cache
-docker-build:
+## Ouvre un shell dans le conteneur
+sh:
+	@echo "🔌 Connexion au conteneur..."
+	docker compose exec app sh
+
+## Lance les tests dans le conteneur Docker
+test:
+	@echo "🧪 Exécution des tests..."
+	docker compose exec app npm run test
+
+## Lance le linter dans le conteneur Docker
+lint:
+	@echo "🔍 Linting du code..."
+	docker compose exec app npm run lint
+
+## Build le projet pour production
+build:
 	@echo "🏗️  Construction de l'image de production..."
-	DOCKER_BUILDKIT=1 docker build -t romane-dice-paradise .
+	DOCKER_BUILDKIT=1 docker build -t yamsattack .
 
 ## Lance le projet en mode production avec Docker
-docker-prod:
+prod:
 	@echo "🚀 Lancement du projet en mode production..."
-	docker run -d -p 80:80 romane-dice-paradise
+	docker run -d -p 80:80 yamsattack
 	@echo "📱 Application disponible sur http://localhost"
 
 ## Nettoie les conteneurs et images Docker
-docker-clean:
+clean:
 	@echo "🧹 Nettoyage des conteneurs et images..."
 	docker compose down --rmi all --volumes --remove-orphans
 
@@ -67,12 +95,7 @@ install:
 	@echo "📦 Installation des dépendances..."
 	yarn install
 
-## Lance le projet en mode développement
+## Lance le projet en mode développement (sans Docker)
 dev:
 	@echo "🚀 Lancement du projet en mode développement..."
 	yarn dev
-
-## Build le projet
-build:
-	@echo "🏗️  Construction du projet..."
-	yarn build 
