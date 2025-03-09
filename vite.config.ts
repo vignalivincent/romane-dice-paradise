@@ -17,7 +17,7 @@ export default defineConfig({
     watch: {
       usePolling: true, // Nécessaire pour le hot reload dans Docker
     },
-    open: true,
+    open: false, // Changed from true to false to prevent xdg-open error
   },
   build: {
     outDir: 'dist',
