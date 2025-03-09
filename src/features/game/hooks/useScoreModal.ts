@@ -7,6 +7,7 @@ import { TOAST_MESSAGES } from '../constants/toastMessages';
 import { t } from 'i18next';
 import { calculateSectionTotal, getMaxScore } from '@/store/utils';
 import { BONUS } from '../constants/bonus';
+import { SCORE_CATEGORIES } from '../constants/categories';
 
 const MIN_CHANCE_VALUE = 1;
 const MAX_CHANCE_VALUE = 30;
@@ -82,7 +83,9 @@ export const useScoreModal = ({ isOpen, onClose, category, player, onYahtzee }: 
     }
 
     const currentUpperTotal = calculateSectionTotal(player, SectionEnum.upper);
-    const isBonusUnlocked = currentUpperTotal < BONUS.upper.threshold && currentUpperTotal + score >= BONUS.upper.threshold;
+    const upperCategories = Object.values(SCORE_CATEGORIES).filter((cat) => cat.section === SectionEnum.upper);
+    const isUpperCategory = upperCategories.some((c) => c.id === category);
+    const isBonusUnlocked = isUpperCategory && currentUpperTotal < BONUS.upper.threshold && currentUpperTotal + score >= BONUS.upper.threshold;
     if (isBonusUnlocked) {
       toast({
         variant: TOAST_MESSAGES.unlockBonus.variant,
