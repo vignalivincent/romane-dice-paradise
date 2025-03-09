@@ -9,6 +9,11 @@ export const TOAST_MESSAGES = {
     title: 'toast.maxScore.title',
     description: 'toast.maxScore.description',
   },
+  unlockBonus: {
+    variant: 'success',
+    title: 'toast.unlockBonus.title',
+    description: 'toast.unlockBonus.description',
+  },
   zeroScore: {
     variant: 'destructive',
     title: 'toast.zeroScore.title',

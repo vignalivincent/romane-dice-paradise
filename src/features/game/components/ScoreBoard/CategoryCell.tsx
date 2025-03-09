@@ -1,7 +1,8 @@
 import { FC, CSSProperties } from 'react';
 import { cn } from '@/utils/cn';
-import { LucideMinusCircle, LucidePlusCircle, LucideTally3, LucideTally4 } from 'lucide-react';
-import { ScoreCategoryUI } from '@/types/game';
+import { ScoreCategoryUI, SectionEnum } from '@/types/game';
+import { getMaxScore } from '@/store/utils';
+import { t } from 'i18next';
 
 interface CategoryCellProps {
   category: ScoreCategoryUI;
@@ -26,19 +27,23 @@ export const CategoryCell: FC<CategoryCellProps> = ({ category, isExpanded = fal
               ? 'absolute left-0 w-[calc(100vw-4rem)] px-3 shadow-lg bg-gradient-to-r from-purple-300 to-indigo-400'
               : cn('w-full justify-center bg-gradient-to-r', category.color)
           )}>
-          {!showContent && (
-            <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2">
-              {category.id === 'threeOfAKind' && <LucideTally3 className="w-3 h-3 text-purple-900" />}
-              {category.id === 'fourOfAKind' && <LucideTally4 className="w-3 h-3 text-purple-900" />}
-              {category.id === 'smallStraight' && <LucideMinusCircle className="w-3 h-3 text-purple-900" />}
-              {category.id === 'largeStraight' && <LucidePlusCircle className="w-3 h-3 text-purple-900" />}
+          {!showContent && category.id !== 'bonus' && category.section === SectionEnum.lower && (
+            <div className="absolute -top-1.5 border border-purple-600 bg-purple-600 text-[10px] text-white font-semibold text-center left-1/2 transform -translate-x-1/2 -translate-y-1/2 py-[1px] px-1 rounded-full shadow-md whitespace-nowrap">
+              {t(`ShortCategoryName.${category.id}`)}
             </div>
           )}
           <div className="flex items-center justify-center bg-white/10 rounded-lg shrink-0 w-8 h-8">{category.icon}</div>
           {showContent && (
-            <div className="min-w-0 flex-1">
-              <div className="font-bold text-white truncate text-sm">{category.name}</div>
-              <div className="text-xs text-white/90 truncate">{category.description}</div>
+            <div className="flex justify-between items-center p-2 min-w-0 flex-1">
+              <div>
+                <div className="font-bold text-white truncate text-sm">{category.name}</div>
+                <div className="text-xs text-white/90 truncate">{category.description}</div>
+              </div>
+              {category.id !== 'chance' && category.section === SectionEnum.lower && (
+                <div className="flex items-center gap-1 text-xs text-white/90 truncate">
+                  <span className="bg-white/20 rounded-full px-2 py-1 font-black">{`+ ${getMaxScore(category.id)} Pts`}</span>
+                </div>
+              )}
             </div>
           )}
         </div>

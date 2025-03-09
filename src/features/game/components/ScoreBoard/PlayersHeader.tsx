@@ -32,14 +32,14 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({ isExpanded, onToggleExpa
       <button
         onClick={onToggleExpand}
         className={cn(
-          'm-auto h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 overflow-hidden',
+          'm-auto h-11 w-11 flex items-center justify-center rounded-full transition-all duration-200 overflow-hidden ',
           'bg-transparent border bg-scroll',
-          isExpanded ? 'bg-purple-500/90 text-white' : 'text-purple-400',
+          isExpanded ? 'bg-purple-500/90 text-white' : 'text-purple-400 ',
           hasScrolled && !isExpanded ? 'opacity-0' : 'opacity-100'
         )}
         title={isExpanded ? 'Masquer les détails' : 'Afficher les détails'}>
         <div>
-          <LucideBadgeInfo className="w-7 h-7 stroke-[2.5] " />
+          <LucideBadgeInfo className="w-8 h-8 stroke-[3] " />
         </div>
       </button>
       <div
@@ -54,8 +54,8 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({ isExpanded, onToggleExpa
                 className="
                 bg-white/5 rounded-lg px-0.5 flex flex-col items-center justify-center h-12">
                 {isLeading && (
-                  <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-5  bg-purple-600 rounded-full flex items-center justify-center ">
-                    <Crown className="w-3 h-3 text-yellow-400 stroke-[3]" />
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-6 h-6 bg-white  rounded-full flex items-center justify-center ">
+                    <Crown className="w-4 h-4 text-yellow-400 stroke-[3]" />
                   </div>
                 )}
                 <div className="font-semibold text-center w-full px-1 leading-tight text-xs mt-5 text-purple-700">{truncateName(player.name)}</div>
