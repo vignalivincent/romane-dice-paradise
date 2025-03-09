@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { usePlayers, useGame } from '@/features/game/store/gameStore';
+import { useScore } from '@/features/game/store/gameStore';
 
 interface VictoryModalProps {
   isOpen: boolean;
@@ -11,11 +11,10 @@ interface VictoryModalProps {
 
 export const VictoryModal: FC<VictoryModalProps> = ({ isOpen, onClose, onNewGame }) => {
   const { t } = useTranslation();
-  const { getLeaderboard } = usePlayers();
-  const { getWinner } = useGame();
-  const winner = getWinner();
+  const { getLeaderBoard } = useScore();
 
-  const leaderboard = getLeaderboard();
+  const leaderboard = getLeaderBoard();
+  const winner = leaderboard[0];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -43,13 +42,13 @@ export const VictoryModal: FC<VictoryModalProps> = ({ isOpen, onClose, onNewGame
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-purple-900">{t('victory.scores')}</h3>
           <div className="space-y-2">
-            {leaderboard.ranking.map((player, index) => {
-              const { playerId, score, playerName } = player;
+            {leaderboard.map((player, index) => {
+              const { id, score, name } = player;
               return (
-                <div key={playerId} className="flex items-center justify-between p-3 rounded-lg bg-purple-50">
+                <div key={id} className="flex items-center justify-between p-3 rounded-lg bg-purple-50">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}</span>
-                    <span className="font-medium text-purple-900">{playerName}</span>
+                    <span className="font-medium text-purple-900">{name}</span>
                   </div>
                   <span className="font-bold text-purple-900">{score}</span>
                 </div>

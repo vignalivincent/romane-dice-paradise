@@ -1,20 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useGame } from '../store/gameStore';
 
 export function useVictory() {
   const [isVictoryModalOpen, setIsVictoryModalOpen] = useState(false);
-  const { hasEnded, getWinner, doResetGame } = useGame();
-  const victoryShown = useRef(false);
+  const { hasEnded, doResetGame } = useGame();
 
   useEffect(() => {
-    const winner = getWinner();
-    if (hasEnded && winner && !victoryShown.current) {
-      victoryShown.current = true;
+    if (hasEnded) {
       setIsVictoryModalOpen(true);
-    } else if (!hasEnded) {
-      victoryShown.current = false;
     }
-  }, [hasEnded, getWinner]);
+  }, [hasEnded]);
 
   const closeVictoryModal = () => {
     setIsVictoryModalOpen(false);

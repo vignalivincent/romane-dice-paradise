@@ -4,16 +4,14 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { generateBarbaName } from '@/utils/nameGenerator';
 import { usePlayers } from '@/features/game/store/gameStore';
+import { t } from 'i18next';
 interface AddPlayerFormProps {
   onAdd: (name: string) => boolean;
-  disabled: boolean;
-  placeholder: string;
-  addLabel: string;
 }
 
 const MAX_NAME_LENGTH = 10;
 
-export const AddPlayerForm: FC<AddPlayerFormProps> = ({ onAdd, disabled, placeholder, addLabel }) => {
+export const AddPlayerForm: FC<AddPlayerFormProps> = ({ onAdd }) => {
   const [name, setName] = useState('');
   const { canAddPlayer } = usePlayers();
   const { toast } = useToast();
@@ -55,8 +53,9 @@ export const AddPlayerForm: FC<AddPlayerFormProps> = ({ onAdd, disabled, placeho
     setName(generateBarbaName());
   };
 
-  const isDisabled = disabled || !canAddPlayer;
-
+  const isDisabled = !canAddPlayer;
+  const placeholder = t('players.input.placeholder');
+  const addLabel = t('players.actions.add');
   return (
     <div className="flex flex-col sm:flex-row gap-3 w-full">
       <div className="flex-1 flex gap-2">

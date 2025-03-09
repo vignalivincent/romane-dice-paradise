@@ -1,37 +1,17 @@
 import { StateCreator } from 'zustand';
 import { Player, ScoreCategory, ScoreState } from '@/types/game';
-
-// Constants
-const MAX_PLAYERS = 5;
-
-export interface Leaderboard {
-  ranking: Array<{
-    playerId: string;
-    playerName: string;
-    score: number;
-  }>;
-  scoreByPlayerId: Record<string, number>;
-  playerById: Record<string, Player>;
-  highestScore: number;
-  lowestScore: number | null;
-  averageScore: number;
-}
+import { CurrentGameSlice } from './currentGameSlice';
+import { MAX_PLAYERS } from '../../constants/maxPlayers';
 
 export interface PlayersSlice {
   players: Player[];
-  getLeaderboard: () => Leaderboard;
   canAddPlayer: () => boolean;
   addPlayer: (name: string) => void;
   removePlayer: (id: string) => void;
   updatePlayerScore: (playerId: string, category: ScoreCategory, value: ScoreState) => void;
-  crossOutPlayerScore: (playerId: string, category: ScoreCategory) => void;
 }
 
-interface StoreWithScores {
-  calculateTotal: (player: Player) => number;
-}
-
-export const createPlayersSlice: StateCreator<PlayersSlice & StoreWithScores, [], [], PlayersSlice> = (set, get) => ({
+export const createPlayersSlice: StateCreator<PlayersSlice & CurrentGameSlice, [], [], PlayersSlice> = (set, get) => ({
   players: [],
 
   canAddPlayer: () => {
@@ -61,7 +41,7 @@ export const createPlayersSlice: StateCreator<PlayersSlice & StoreWithScores, []
       players: state.players.filter((p) => p.id !== id),
     })),
 
-  updatePlayerScore: (playerId, category, value) =>
+  updatePlayerScore: (playerId, category, value) => {
     set((state) => ({
       players: state.players.map((player) =>
         player.id === playerId
@@ -74,67 +54,15 @@ export const createPlayersSlice: StateCreator<PlayersSlice & StoreWithScores, []
             }
           : player
       ),
-    })),
+    }));
 
-  crossOutPlayerScore: (playerId, category) =>
-    set((state) => ({
-      players: state.players.map((player) =>
-        player.id === playerId
-          ? {
-              ...player,
-              scores: {
-                ...player.scores,
-                [category]: 'crossed',
-              },
-            }
-          : player
-      ),
-    })),
+    const { players } = get();
 
-  getLeaderboard: () => {
-    const { players, calculateTotal } = get();
-
-    if (players.length === 0) {
-      return {
-        ranking: [],
-        scoreByPlayerId: {},
-        playerById: {},
-        highestScore: 0,
-        lowestScore: null,
-        averageScore: 0,
-      };
-    }
-
-    const scoreByPlayerId: Record<string, number> = {};
-    const playerById: Record<string, Player> = {};
-    let totalScore = 0;
-
-    players.forEach((player) => {
-      const score = calculateTotal(player);
-      scoreByPlayerId[player.id] = score;
-      playerById[player.id] = player;
-      totalScore += score;
+    const isGameComplete = players.every((player) => {
+      const filledCategories = Object.keys(player.scores).length;
+      return filledCategories >= 13;
     });
 
-    const ranking = players
-      .map((player) => ({
-        playerId: player.id,
-        playerName: player.name,
-        score: scoreByPlayerId[player.id],
-      }))
-      .sort((a, b) => b.score - a.score);
-
-    const highestScore = ranking[0]?.score || 0;
-    const lowestScore = ranking[ranking.length - 1]?.score || null;
-    const averageScore = players.length > 0 ? totalScore / players.length : 0;
-
-    return {
-      ranking,
-      scoreByPlayerId,
-      playerById,
-      highestScore,
-      lowestScore,
-      averageScore,
-    };
+    set({ isGameComplete });
   },
 });

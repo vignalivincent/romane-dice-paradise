@@ -2,7 +2,7 @@ import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGame, usePlayers, useScore } from '../../store/gameStore';
 import { useVictory } from '../../hooks/useVictory';
-import { ScoreCategory, ScoreState } from '@/types/game';
+import { ScoreCategory, ScoreCategoryUI, ScoreState, SectionEnum } from '@/types/game';
 import { ScoreModal } from '../ScoreModal';
 import { VictoryModal } from '../VictoryModal';
 import { RankingModal } from '../RankingModal';
@@ -13,17 +13,17 @@ import { TotalRow } from './TotalRow';
 import { SCORE_CATEGORIES } from '../../constants/categories';
 import { TOAST_MESSAGES } from '../../constants/toastMessages';
 import { useToast } from '@/components/ui/use-toast';
-import { ScoreCategoryUI } from '../../constants/categories';
 import { useYahtzeeAnimation } from '../../hooks/useYahtzeeAnimation';
 import { YahtzeeAnimation } from '../YahtzeeAnimation';
+import { calculateSectionTotal } from '../../store/utils';
 
 export const ScoreBoard: FC = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { players } = usePlayers();
   const { hasStarted, gameHistory, doResetGame, doEndGame, hasEnded, isGameComplete } = useGame();
-  const isCompleted = isGameComplete();
-  const { getUpperBonus, getMaxScore, doUpdateScore, doCalculatePlayerSectionTotal } = useScore();
+  const isCompleted = isGameComplete;
+  const { getUpperBonus, getMaxScore, doUpdateScore } = useScore();
 
   const { isAnimationActive, playAnimation, handleAnimationComplete, animationDuration } = useYahtzeeAnimation();
 
@@ -64,14 +64,12 @@ export const ScoreBoard: FC = () => {
 
       if (isCompleted && !hasEnded && !hasEndedGame.current) {
         hasEndedGame.current = true;
-        setTimeout(() => {
-          doEndGame();
-        }, 0);
+        doEndGame();
       } else if (!isCompleted) {
         hasEndedGame.current = false;
       }
     }
-  }, [isCompleted, hasEndedGame, doEndGame]);
+  }, [isCompleted, hasEnded, hasEndedGame, doEndGame]);
 
   if (!hasStarted || players.length === 0) return null;
 
@@ -165,12 +163,12 @@ export const ScoreBoard: FC = () => {
     setConfirmEndGameOpen(false);
   };
 
-  const upperCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'upper');
-  const lowerCategories = SCORE_CATEGORIES.filter((cat) => cat.section === 'lower');
+  const upperCategories = SCORE_CATEGORIES.filter((cat) => cat.section === SectionEnum.upper && cat.id !== 'bonus');
+  const lowerCategories = SCORE_CATEGORIES.filter((cat) => cat.section === SectionEnum.lower);
 
-  const upperTotals = players.map((player) => doCalculatePlayerSectionTotal(player, 'upper'));
-  const lowerTotals = players.map((player) => doCalculatePlayerSectionTotal(player, 'lower'));
-  const bonusValues = players.map((player) => getUpperBonus(player));
+  const upperTotals = players.map((player) => calculateSectionTotal(player, SectionEnum.upper));
+  const lowerTotals = players.map((player) => calculateSectionTotal(player, SectionEnum.lower));
+  const bonusValue = players.map((player) => getUpperBonus(player));
 
   return (
     <div className="space-y-10">
@@ -192,7 +190,7 @@ export const ScoreBoard: FC = () => {
 
           <div className="category-cell">
             <TotalRow
-              values={bonusValues}
+              values={bonusValue}
               players={players.length}
               className={(value) => (value > 0 ? 'bg-emerald-400/20 text-emerald-50' : 'bg-white/10 text-white/50')}
               isBonus

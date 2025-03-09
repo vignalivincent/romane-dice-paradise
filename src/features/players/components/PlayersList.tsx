@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePlayers } from '@/features/game/store/gameStore';
-import { useGame } from '@/features/game/store/gameStore';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { AddPlayerForm } from './AddPlayerForm';
 import { PlayerCard } from './PlayerCard';
@@ -9,7 +8,6 @@ import { PlayerCard } from './PlayerCard';
 export const PlayersList: FC = () => {
   const { t } = useTranslation();
   const { players, doAddPlayer, doRemovePlayer } = usePlayers();
-  const { hasStarted } = useGame();
 
   const handleAddPlayer = (name: string): boolean => {
     const playerExists = players.some((player) => player.name.toLowerCase() === name.toLowerCase());
@@ -23,11 +21,11 @@ export const PlayersList: FC = () => {
   return (
     <div className="flex flex-col h-full gap-8">
       <div className="flex flex-col gap-4">
-        <AddPlayerForm onAdd={handleAddPlayer} disabled={hasStarted} placeholder={t('players.input.placeholder')} addLabel={t('players.actions.add')} />
+        <AddPlayerForm onAdd={handleAddPlayer} />
 
         <div className="flex-1 grid content-start gap-3 min-h-0 overflow-y-auto pr-1 lg:pr-2">
           {players.map((player) => (
-            <PlayerCard key={player.id} player={player} onRemove={doRemovePlayer} disabled={hasStarted} removeLabel={t('players.actions.remove')} />
+            <PlayerCard key={player.id} player={player} onRemove={doRemovePlayer} />
           ))}
 
           {players.length === 0 && (

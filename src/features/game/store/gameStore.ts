@@ -3,13 +3,12 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { devtools } from 'zustand/middleware';
 import { PlayersSlice, createPlayersSlice } from './slices/playersSlice';
 import { CurrentGameSlice, createCurrentGameSlice } from './slices/currentGameSlice';
-import { ScoresSlice, createScoresSlice } from './slices/scoresSlice';
 import { useShallow } from 'zustand/react/shallow';
 import { createHistorySlice, HistorySlice } from './slices/historySlice';
 
-const STORAGE_KEY = 'romane-dice-paradise-game-state';
+const STORAGE_KEY = 'dice-paradise-game-state';
 
-type BoundState = PlayersSlice & CurrentGameSlice & ScoresSlice & HistorySlice;
+type BoundState = PlayersSlice & CurrentGameSlice & HistorySlice;
 
 const useBoundStore = create<BoundState>()(
   devtools(
@@ -17,7 +16,6 @@ const useBoundStore = create<BoundState>()(
       (set, get, api) => ({
         ...createPlayersSlice(set, get, api),
         ...createCurrentGameSlice(set, get, api),
-        ...createScoresSlice(set, get, api),
         ...createHistorySlice(set, get, api),
       }),
       {
@@ -48,7 +46,6 @@ export const usePlayers = () =>
 export const useGame = () =>
   useBoundStore(
     useShallow((state) => ({
-      getWinner: state.getWinner,
       gameHistory: state.gameHistory,
       hasStarted: state.isStarted,
       hasEnded: state.isGameEnded,
@@ -62,11 +59,9 @@ export const useGame = () =>
 export const useScore = () =>
   useBoundStore(
     useShallow((state) => ({
-      doCalculatePlayerSectionTotal: state.calculateSectionTotal,
-      doCalculatePlayerTotal: state.calculateTotal,
+      getLeaderBoard: state.getLeaderboard,
       getUpperBonus: state.getUpperBonus,
       getMaxScore: state.getMaxScore,
-      getLeadingPlayer: state.getLeadingPlayer,
       getScoreStyle: state.getScoreStyle,
       doUpdateScore: state.updatePlayerScore,
     }))

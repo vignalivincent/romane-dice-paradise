@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand';
-import { GameHistory, Player } from '@/types/game';
-import { PlayerWithScore } from './currentGameSlice';
+import { GameHistory } from '@/types/game';
+import { CurrentGameSlice } from './currentGameSlice';
+import { PlayersSlice } from './playersSlice';
 
 export interface PlayerStats {
   gamesPlayed: number;
@@ -13,24 +14,26 @@ export interface PlayerStats {
 export interface HistorySlice {
   gameHistory: GameHistory[];
   getSortedPlayerStats: () => PlayerStats[];
-  addGameToHistory: (players: PlayerWithScore[], winnerId: string) => void;
+  addGameToHistory: () => void;
 }
 
-interface HistorySliceDependencies {
-  players: Player[];
-}
+type HistorySliceDependencies = PlayersSlice & CurrentGameSlice;
 
 export const createHistorySlice: StateCreator<HistorySliceDependencies & HistorySlice, [], [], HistorySlice> = (set, get) => ({
   gameHistory: [],
 
-  addGameToHistory: (players: PlayerWithScore[], winnerId: string) => {
+  addGameToHistory: () => {
+    const { getLeaderboard } = get();
+    const leaderBoard = getLeaderboard();
+    const { id: winnerId } = leaderBoard[0];
+
     set((state) => ({
       gameHistory: [
         ...state.gameHistory,
         {
           id: crypto.randomUUID(),
           date: new Date().toISOString(),
-          players,
+          players: leaderBoard,
           winnerId,
         },
       ],
