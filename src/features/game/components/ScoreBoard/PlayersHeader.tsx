@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { Crown, LucideBadgeInfo } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useGameStore, useScoreCalculations } from '../../store/gameStore';
+import { usePlayers, useScore } from '../../store/gameStore';
 import { useScrollDetection } from '@/features/game/hooks/useScrollDetection';
+import { calculateTotal } from '../../store/utils';
 
 interface PlayersHeaderProps {
   isExpanded: boolean;
@@ -10,9 +11,10 @@ interface PlayersHeaderProps {
 }
 
 export const PlayersHeader: FC<PlayersHeaderProps> = ({ isExpanded, onToggleExpand }) => {
-  const { players, getLeadingPlayer } = useGameStore();
-  const { calculateTotal } = useScoreCalculations();
-  const { id: leadingPlayerId } = getLeadingPlayer();
+  const { players } = usePlayers();
+  const { getLeaderBoard } = useScore();
+  const leaderboard = getLeaderBoard();
+  const leadingPlayerId = leaderboard[0].id;
   const hasScrolled = useScrollDetection();
 
   const shouldTruncate = players.length >= 5;

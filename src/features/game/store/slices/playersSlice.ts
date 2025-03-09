@@ -1,8 +1,7 @@
 import { StateCreator } from 'zustand';
 import { Player, ScoreCategory, ScoreState } from '@/types/game';
-
-// Constants
-const MAX_PLAYERS = 5;
+import { CurrentGameSlice } from './currentGameSlice';
+import { MAX_PLAYERS } from '../../constants/maxPlayers';
 
 export interface PlayersSlice {
   players: Player[];
@@ -10,10 +9,9 @@ export interface PlayersSlice {
   addPlayer: (name: string) => void;
   removePlayer: (id: string) => void;
   updatePlayerScore: (playerId: string, category: ScoreCategory, value: ScoreState) => void;
-  crossOutPlayerScore: (playerId: string, category: ScoreCategory) => void;
 }
 
-export const createPlayersSlice: StateCreator<PlayersSlice, [], [], PlayersSlice> = (set, get) => ({
+export const createPlayersSlice: StateCreator<PlayersSlice & CurrentGameSlice, [], [], PlayersSlice> = (set, get) => ({
   players: [],
 
   canAddPlayer: () => {
@@ -22,7 +20,6 @@ export const createPlayersSlice: StateCreator<PlayersSlice, [], [], PlayersSlice
 
   addPlayer: (name) =>
     set((state) => {
-      // Check if name already exists (case insensitive)
       const nameExists = state.players.some((player) => player.name.toLowerCase() === name.toLowerCase());
 
       if (nameExists || state.players.length >= MAX_PLAYERS) return state;
@@ -44,7 +41,7 @@ export const createPlayersSlice: StateCreator<PlayersSlice, [], [], PlayersSlice
       players: state.players.filter((p) => p.id !== id),
     })),
 
-  updatePlayerScore: (playerId, category, value) =>
+  updatePlayerScore: (playerId, category, value) => {
     set((state) => ({
       players: state.players.map((player) =>
         player.id === playerId
@@ -57,20 +54,15 @@ export const createPlayersSlice: StateCreator<PlayersSlice, [], [], PlayersSlice
             }
           : player
       ),
-    })),
+    }));
 
-  crossOutPlayerScore: (playerId, category) =>
-    set((state) => ({
-      players: state.players.map((player) =>
-        player.id === playerId
-          ? {
-              ...player,
-              scores: {
-                ...player.scores,
-                [category]: 'crossed',
-              },
-            }
-          : player
-      ),
-    })),
+    const { players } = get();
+
+    const isGameComplete = players.every((player) => {
+      const filledCategories = Object.keys(player.scores).length;
+      return filledCategories >= 13;
+    });
+
+    set({ isGameComplete });
+  },
 });

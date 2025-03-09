@@ -20,6 +20,6 @@ export const TOAST_MESSAGES = {
     variant: 'default',
     description: 'toast.yahtzee.description',
     className: 'bg-yellow-600 text-yellow-100 border-2 border-yellow-400 font-bold text-lg',
-    duration: 5000,
+    duration: 4000,
   },
 } as const;

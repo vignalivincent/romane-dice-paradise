@@ -4,12 +4,12 @@ import { PlayersList } from '@/features/players/components/PlayersList';
 import { GameControls } from '@/features/game/components/GameControls';
 import { ScoreBoard } from '@/features/game/components/ScoreBoard';
 import { Toaster } from '@/components/ui/toaster';
-import { useGameStore } from '@/features/game/store/gameStore';
+import { useGame } from '@/features/game/store/gameStore';
 import '@/i18n';
 
 const App: FC = () => {
   const { t } = useTranslation();
-  const { isStarted } = useGameStore();
+  const { hasStarted } = useGame();
 
   return (
     <>
@@ -37,7 +37,7 @@ const App: FC = () => {
               <p className="text-white/90 text-sm font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic text-center">{t('app.subtitle')} ✨</p>
             </div>
 
-            {!isStarted ? (
+            {!hasStarted ? (
               <div className="flex flex-col flex-1 gap-6">
                 <div className="backdrop-blur-md bg-white/40 rounded-xl p-4 shadow-xl ring-1 ring-white/50 flex flex-col">
                   <PlayersList />

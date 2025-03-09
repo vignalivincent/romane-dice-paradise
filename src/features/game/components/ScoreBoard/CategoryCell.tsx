@@ -1,7 +1,7 @@
 import { FC, CSSProperties } from 'react';
-import { ScoreCategoryUI } from '../../constants/categories';
 import { cn } from '@/lib/utils';
 import { LucideMinusCircle, LucidePlusCircle, LucideTally3, LucideTally4 } from 'lucide-react';
+import { ScoreCategoryUI } from '@/types/game';
 
 interface CategoryCellProps {
   category: ScoreCategoryUI;

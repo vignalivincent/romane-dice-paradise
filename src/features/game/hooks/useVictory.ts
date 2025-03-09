@@ -1,43 +1,28 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { useGameStore } from '../store/gameStore';
+import { useState, useEffect } from 'react';
+import { useGame } from '../store/gameStore';
 
-interface UseVictoryProps {
-  onReset: () => void;
-  isGameEnded: boolean;
-}
-
-export const useVictory = ({ onReset, isGameEnded }: UseVictoryProps) => {
+export function useVictory() {
   const [isVictoryModalOpen, setIsVictoryModalOpen] = useState(false);
-  const hasShownModal = useRef(false);
-
-  const isGameComplete = useGameStore((state) => state.isGameComplete());
-  const playersWithTotalScores = useGameStore((state) => state.getPlayersWithScores());
-  const winner = useGameStore((state) => state.getWinner());
+  const { hasEnded, doResetGame } = useGame();
 
   useEffect(() => {
-    if (isGameComplete && isGameEnded && !hasShownModal.current) {
+    if (hasEnded) {
       setIsVictoryModalOpen(true);
-      hasShownModal.current = true;
-    } else if (!isGameEnded) {
-      hasShownModal.current = false;
     }
-  }, [isGameComplete, isGameEnded]);
+  }, [hasEnded]);
 
-  const closeVictoryModal = useCallback(() => {
+  const closeVictoryModal = () => {
     setIsVictoryModalOpen(false);
-  }, []);
+  };
 
-  const handleNewGame = useCallback(() => {
+  const handleNewGame = () => {
+    doResetGame();
     setIsVictoryModalOpen(false);
-    onReset();
-  }, [onReset]);
+  };
 
   return {
     isVictoryModalOpen,
-    winner,
-    playersWithTotalScores,
     closeVictoryModal,
     handleNewGame,
-    isGameComplete,
   };
-};
+}
