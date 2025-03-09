@@ -9,6 +9,7 @@ export enum SectionEnum {
 }
 
 export type ScoreState = 'crossed' | number | undefined;
+export type TotalRowVariant = 'default' | 'bonus' | 'total';
 
 interface BaseScoreCategoryUI {
   name: string;

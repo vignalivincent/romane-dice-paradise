@@ -1,8 +1,8 @@
 import { StateCreator } from 'zustand';
-import { Leaderboard, Player, ScoreCategory, ScoreState } from '@/types/game';
+import { Leaderboard, Player, ScoreCategory, ScoreState, SectionEnum } from '@/types/game';
 import { PlayersSlice } from './playersSlice';
 import { HistorySlice } from './historySlice';
-import { calculateTotal, getMaxScore, getScoreStyle, getUpperBonus } from '../utils';
+import { calculateTotal, getMaxScore, getScoreStyle, getUpperBonus, calculateSectionTotal } from '../utils';
 
 export const hasPlayerCompletedAllCategories = (player: Player): boolean => {
   return Object.values(player.scores).length === 13;
@@ -73,8 +73,6 @@ export const createCurrentGameSlice: StateCreator<CurrentGameSliceDependencies &
       }
 
       addGameToHistory();
-      // Don't call resetGame() here as it conflicts with the state we're setting
-
       return { isStarted: true, isGameEnded: true };
     });
   },
@@ -83,7 +81,7 @@ export const createCurrentGameSlice: StateCreator<CurrentGameSliceDependencies &
     set((state) => ({
       isStarted: false,
       isGameEnded: false,
-      isGameComplete: false, // Make sure isGameComplete is also reset
+      isGameComplete: false,
       players: state.players.map(resetPlayerScores),
     })),
 
@@ -95,8 +93,14 @@ export const createCurrentGameSlice: StateCreator<CurrentGameSliceDependencies &
         id: player.id,
         name: player.name,
         score: calculateTotal(player),
+        upperSectionTotal: calculateSectionTotal(player, SectionEnum.upper), // Using existing calculateSectionTotal function
       }))
-      .sort((a, b) => b.score - a.score);
+      .sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        return b.upperSectionTotal - a.upperSectionTotal;
+      });
 
     return leaderBoard;
   },

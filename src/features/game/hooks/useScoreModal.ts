@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Player, ScoreCategory } from '@/types/game';
+import { Player, ScoreCategory, SectionEnum } from '@/types/game';
 import { getPotentialScoreListByCategory } from '../constants/potentialScore';
 import { useScore } from '@/store/gameStore';
 import { toast } from '@/ui/hooks/use-toast';
 import { TOAST_MESSAGES } from '../constants/toastMessages';
 import { t } from 'i18next';
-import { getMaxScore } from '@/store/utils';
+import { calculateSectionTotal, getMaxScore } from '@/store/utils';
+import { BONUS } from '../constants/bonus';
 
 const MIN_CHANCE_VALUE = 1;
 const MAX_CHANCE_VALUE = 30;
@@ -78,6 +79,16 @@ export const useScoreModal = ({ isOpen, onClose, category, player, onYahtzee }: 
         description: t(TOAST_MESSAGES.yahtzee.description, { name: player.name }),
       });
       onYahtzee();
+    }
+
+    const currentUpperTotal = calculateSectionTotal(player, SectionEnum.upper);
+    const isBonusUnlocked = currentUpperTotal < BONUS.upper.threshold && currentUpperTotal + score >= BONUS.upper.threshold;
+    if (isBonusUnlocked) {
+      toast({
+        variant: TOAST_MESSAGES.unlockBonus.variant,
+        title: t(TOAST_MESSAGES.unlockBonus.title),
+        description: t(TOAST_MESSAGES.unlockBonus.description, { name: player.name }),
+      });
     }
     onClose();
   };

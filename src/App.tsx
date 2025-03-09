@@ -34,7 +34,7 @@ const App: FC = () => {
                 <span>{t('app.title')}</span>
                 <span>🎲</span>
               </h1>
-              <p className="text-white/90 text-sm font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic text-center">{t('app.subtitle')} ✨</p>
+              <p className="text-white/90 text-sm font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] mt-3 italic text-center">{t('app.subtitle')}</p>
             </div>
 
             {!hasStarted ? (

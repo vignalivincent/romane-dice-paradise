@@ -1,7 +1,7 @@
 {
   "app": {
-    "title": "Dice Paradise",
-    "subtitle": "Le paradis des dés enchantés"
+    "title": "Yams Attack",
+    "subtitle": "Rien de va plus, relance !"
   },
   "common": {
     "cancel": "Annuler",
@@ -153,6 +153,10 @@
       "title": "🍾 Tu me fais rêver !",
       "description": "{{name}}, j'ai toujours cru en toi ! Rendez-vous au sommet."
     },
+    "unlockBonus": {
+      "title": "🤑 Bonus",
+      "description": "Personne n'y croyait {{name}}, +35 points !"
+    },
     "zeroScore": {
       "title": "💩 Aïe aïe aïe...",
       "description": "{{name}}, toi il va falloir te reprendre ! Ne gâche plus ton potentiel comme ça."
@@ -178,5 +182,20 @@
   },
   "animations": {
     "yahtzee": "Yams! 🎲"
+  },
+  "ShortCategoryName": {
+    "ones": "As",
+    "twos": "Deux",
+    "threes": "Trois",
+    "fours": "Quatre",
+    "fives": "Cinq",
+    "sixes": "Six",
+    "threeOfAKind": "Brelan",
+    "fourOfAKind": "Carré",
+    "fullHouse": "Full",
+    "smallStraight": "Petite S.",
+    "largeStraight": "Grande S.",
+    "yahtzee": "Yams",
+    "chance": "Chance"
   }
 }

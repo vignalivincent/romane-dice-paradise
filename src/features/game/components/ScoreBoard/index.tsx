@@ -60,11 +60,11 @@ export const ScoreBoard: FC = () => {
   const bonusValue = players.map((player) => getUpperBonus(player));
 
   return (
-    <div className="space-y-10">
-      <div className="space-y-1.5">
+    <>
+      <div className="">
         <PlayersHeader isExpanded={isExpanded} onToggleExpand={handleToggleExpand} />
 
-        <div className="space-y-1.5">
+        <div className="mt-2">
           <ScoreSection
             categories={upperCategories}
             players={players}
@@ -75,13 +75,12 @@ export const ScoreBoard: FC = () => {
             isGameEnded={hasEnded}
           />
 
-          <TotalRow values={upperTotals} players={players.length} hideLabel />
-
-          <div className="category-cell">
+          <div className="category-cell space-y-2">
+            <TotalRow values={upperTotals} players={players.length} variant="total" />
             <TotalRow
               values={bonusValue}
               players={players.length}
-              className={(value) => (value > 0 ? 'bg-emerald-400/20 text-emerald-50' : 'bg-white/10 text-white/50')}
+              variant="bonus"
               isBonus
               isExpanded={isExpanded}
               isFocused={isBonusExpanded}
@@ -90,7 +89,7 @@ export const ScoreBoard: FC = () => {
           </div>
         </div>
 
-        <div className="space-y-1.5">
+        <div className="space-y-2 mt-8">
           <ScoreSection
             categories={lowerCategories}
             players={players}
@@ -101,11 +100,11 @@ export const ScoreBoard: FC = () => {
             isGameEnded={hasEnded}
           />
 
-          <TotalRow values={lowerTotals} players={players.length} hideLabel />
+          <TotalRow values={lowerTotals} players={players.length} variant="total" />
         </div>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-2 mt-8">
         <button
           onClick={() => handleEndGameClick(openConfirmEndGameModal)}
           className={`flex-1 ${hasEnded ? 'bg-emerald-500/90 hover:bg-emerald-500' : 'bg-red-500/90 hover:bg-red-500'} 
@@ -140,6 +139,6 @@ export const ScoreBoard: FC = () => {
 
         <ConfirmEndGameModal isOpen={confirmEndGameOpen} onClose={closeConfirmEndGameModal} onConfirm={() => handleEndGameConfirm(closeConfirmEndGameModal)} />
       </div>
-    </div>
+    </>
   );
 };
