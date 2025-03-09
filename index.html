@@ -1,21 +1,68 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="YamsAttack - La chance se provoque, les points s'accumulent !" />
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Dice emoji favicon -->
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>"
-      type="image/svg+xml" />
+    <!-- Primary Meta Tags -->
+    <title>YamsAttack - Un jeu de dés enchantés</title>
+    <meta name="title" content="YamsAttack - Un jeu de dés enchantés" />
+    <meta name="description" content="Jouez au Yams en ligne avec un système de score automatique. Jusqu'à 6 joueurs, mode sombre et interface responsive." />
+    <meta name="keywords" content="yams, jeu de dés, jeu en ligne, dice game, score yams, yahtzee, feuille yams, tableau yams, jeux de société en ligne" />
+    <meta name="author" content="Vincent Vignali" />
+    <meta name="robots" content="index, follow" />
 
-    <title>YamsAttack</title>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yamsattack.vercel.app/" />
+    <meta property="og:title" content="YamsAttack - Un jeu de dés enchantés" />
+    <meta
+      property="og:description"
+      content="Jouez au Yams en ligne avec un système de score automatique. Jusqu'à 6 joueurs, mode sombre et interface responsive." />
+    <meta property="og:image" content="https://yamsattack.vercel.app/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://yamsattack.vercel.app/" />
+    <meta property="twitter:title" content="YamsAttack - Un jeu de dés enchantés" />
+    <meta
+      property="twitter:description"
+      content="Jouez au Yams en ligne avec un système de score automatique. Jusqu'à 6 joueurs, mode sombre et interface responsive." />
+    <meta property="twitter:image" content="https://yamsattack.vercel.app/og-image.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yamsattack.vercel.app/" />
+
+    <!-- Preconnect to resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <!-- Theme color -->
+    <meta name="theme-color" content="#4f46e5" />
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "YamsAttack",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any",
+        "description": "Jouez au Yams en ligne avec un système de score automatique. Jusqu'à 6 joueurs, mode sombre et interface responsive.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Vincent Vignali"
+        }
+      }
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Pour jouer à YamsAttack, veuillez activer JavaScript dans votre navigateur.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
