@@ -1,5 +1,5 @@
 {
-  "name": "romane-dice-paradise",
+  "name": "yamsAttack",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -67,5 +67,13 @@
     "*.{json,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/yamsAttack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/yamsAttack/issues"
+  },
+  "homepage": "https://github.com/yourusername/yamsAttack#readme"
 }
