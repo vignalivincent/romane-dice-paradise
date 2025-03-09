@@ -1,9 +1,23 @@
 {
-  "name": "yamsAttack",
+  "name": "yamsattack",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "license": "MIT",
+  "description": "Un jeu de Yams (Yahtzee) en ligne gratuit avec une interface moderne et responsive",
+  "keywords": [
+    "yams",
+    "yahtzee",
+    "dice-game",
+    "jeu-de-des",
+    "react",
+    "typescript",
+    "tailwindcss"
+  ],
+  "author": {
+    "name": "Vincent Vignali",
+    "url": "https://github.com/vignaliVincent"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --build tsconfig.app.json && vite build",
@@ -70,10 +84,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/yamsAttack.git"
+    "url": "git+https://github.com/vignaliVincent/yamsAttack.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/yamsAttack/issues"
+    "url": "https://github.com/vignaliVincent/yamsAttack/issues"
   },
-  "homepage": "https://github.com/yourusername/yamsAttack#readme"
+  "homepage": "https://yamsattack.vercel.app"
 }

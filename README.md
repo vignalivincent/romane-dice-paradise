@@ -1,14 +1,42 @@
-# YamsAttack 🎲
+# YamsAttack 🎲 - Jeu de Yams en ligne
 
-[![Vercel Production Deployment](https://img.shields.io/badge/vercel-production-blue)](https://romane-dice-paradise.vercel.app)
-[![GitHub Actions CI](https://github.com/vignalivincent/romane-dice-paradise/actions/workflows/ci.yml/badge.svg)](https://github.com/vignalivincent/romane-dice-paradise/actions/workflows/ci.yml)
+[![Vercel Production Deployment](https://img.shields.io/badge/vercel-production-blue)](https://yamsattack.vercel.app)
+[![GitHub Actions CI](https://github.com/vignalivincent/yamsAttack/actions/workflows/ci.yml/badge.svg)](https://github.com/vignalivincent/yamsAttack/actions/workflows/ci.yml)
 
-Un jeu de dés enchantés pour Romane 🌟
+YamsAttack est un jeu de Yams (Yahtzee) en ligne gratuit avec une interface moderne et responsive, permettant de jouer jusqu'à 6 joueurs. Lancez les dés, choisissez vos combinaisons et amusez-vous avec ce jeu de société intemporel! 🌟
 
-## Environnements
+## 🔗 Liens
 
-- **Production** : [romane-dice-paradise.vercel.app](https://romane-dice-paradise.vercel.app)
+- **Production** : [yamsattack.vercel.app](https://yamsattack.vercel.app)
 - **Preview** : Déployé automatiquement pour chaque branche
+
+## 🚀 Fonctionnalités
+
+- Interface utilisateur moderne et responsive
+- Support multilingue (Français)
+- Gestion des scores en temps réel
+- Jusqu'à 6 joueurs simultanés
+- Système de bonus et de totaux automatiques
+- Mode sombre/clair adaptatif
+
+## 🛠️ Technologies
+
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Zustand
+- i18next
+- Radix UI
+
+## 🎮 Comment jouer
+
+1. Ajoutez entre 1 et 6 joueurs
+2. À chaque tour, lancez les dés (jusqu'à 3 fois)
+3. Après chaque lancer, sélectionnez les dés à conserver
+4. Choisissez une case pour enregistrer votre score
+5. Les combinaisons possibles incluent les numéros simples, les brelan, carré, full, petite suite, grande suite et yams
+6. Le joueur avec le score total le plus élevé gagne!
 
 ## Développement
 
@@ -44,30 +72,11 @@ yarn format
 - ✅ `check` : Tests (test)
 - 🔧 `wrench` : Configuration (chore)
 
-## 🚀 Fonctionnalités
-
-- Interface utilisateur moderne et responsive
-- Support multilingue (Français)
-- Gestion des scores en temps réel
-- Jusqu'à 6 joueurs
-- Système de bonus et de totaux automatiques
-- Mode sombre/clair
-
-## 🛠️ Technologies
-
-- React 19
-- TypeScript
-- Vite
-- Tailwind CSS
-- Zustand
-- i18next
-- Radix UI
-
 ## 📦 Installation
 
 ```bash
 # Cloner le projet
-git clone [url-du-repo]
+git clone https://github.com/vignaliVincent/yamsAttack.git
 
 # Installer les dépendances
 yarn install
@@ -150,12 +159,37 @@ Pour construire et lancer l'application en production :
 
 ```bash
 # Construire l'image
-docker build -t romane-dice-paradise .
+docker build -t yamsattack .
 
 # Lancer le conteneur
-docker run -d -p 80:80 romane-dice-paradise
+docker run -d -p 80:80 yamsattack
 ```
 
-## Repository Information
+## 📋 Informations sur le Repository
 
-This project was formerly known as "romane-dice-paradice" and has been renamed to "yamsAttack".
+Ce projet était précédemment connu sous le nom "romane-dice-paradice" et a été renommé "yamsAttack".
+
+## 📱 Compatibilité
+
+YamsAttack fonctionne sur tous les navigateurs modernes et appareils:
+
+- Ordinateurs (Chrome, Firefox, Safari, Edge)
+- Tablettes Android et iPad
+- Smartphones Android et iOS
+
+## 🔍 Règles du Yams
+
+Le Yams se joue avec 5 dés et une feuille de score. À votre tour:
+
+1. Lancez les 5 dés
+2. Conservez les dés que vous voulez
+3. Relancez jusqu'à 2 fois
+4. Choisissez une combinaison pour marquer des points
+
+## ⭐ Pourquoi choisir YamsAttack?
+
+- Gratuit et sans publicité
+- Interface intuitive et moderne
+- Calcul automatique des scores
+- Pas d'inscription nécessaire
+- Fonctionne même hors ligne après chargement
