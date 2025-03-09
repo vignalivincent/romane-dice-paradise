@@ -8,24 +8,20 @@ export const TOAST_MESSAGES = {
     variant: 'success',
     title: 'toast.maxScore.title',
     description: 'toast.maxScore.description',
-    className: 'max-score-toast',
   },
   zeroScore: {
     variant: 'destructive',
     title: 'toast.zeroScore.title',
     description: 'toast.zeroScore.description',
-    className: 'zero-score-toast',
   },
   yahtzee: {
-    variant: 'default',
+    variant: 'gold',
     description: 'toast.yahtzee.description',
-    className: 'bg-yellow-600 text-yellow-100 border-2 border-yellow-400 font-bold text-lg',
     duration: 4000,
   },
   gameStarted: {
     variant: 'primary',
     description: 'toast.gameStarted.description',
-    className: 'text-xl font-bold',
   },
   playerExists: {
     variant: 'destructive',
@@ -36,5 +32,10 @@ export const TOAST_MESSAGES = {
     variant: 'default',
     title: 'toast.playerAdded.title',
     description: 'toast.playerAdded.description',
+  },
+  maxPlayers: {
+    variant: 'warning',
+    title: 'toast.maxPlayers.title',
+    description: 'toast.maxPlayers.description',
   },
 } as const;

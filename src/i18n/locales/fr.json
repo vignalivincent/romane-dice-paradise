@@ -157,10 +157,6 @@
       "title": "💩 Aïe aïe aïe...",
       "description": "{{name}}, toi il va falloir te reprendre ! Ne gâche plus ton potentiel comme ça."
     },
-    "crossOut": {
-      "title": "Case barrée",
-      "description": "La case a été barrée et ne rapportera aucun point."
-    },
     "yahtzee": {
       "description": "🌟 {{name}}, tu es une légende !"
     },
@@ -174,6 +170,10 @@
     "playerAdded": {
       "title": "Succès",
       "description": "Le joueur a été ajouté"
+    },
+    "maxPlayers": {
+      "title": "Maximum atteint",
+      "description": "Vous ne pouvez pas ajouter plus de 5 joueurs"
     }
   },
   "animations": {

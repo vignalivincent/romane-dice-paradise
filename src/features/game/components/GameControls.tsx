@@ -18,7 +18,6 @@ export const GameControls: FC = () => {
     toast({
       variant: TOAST_MESSAGES.gameStarted.variant,
       description: t(TOAST_MESSAGES.gameStarted.description),
-      className: TOAST_MESSAGES.gameStarted.className,
     });
   };
 
