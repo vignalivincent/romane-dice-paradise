@@ -18,9 +18,9 @@ export const PlayersHeader: FC<PlayersHeaderProps> = ({ isExpanded, onToggleExpa
   const hasScrolled = useScrollDetection();
   const truncateName = (name: string): string => {
     if (players.length >= 5) {
-      return name.length > 5 ? `${name.slice(0, 6)}.` : name;
+      return name.length > 6 ? `${name.slice(0, 6)}.` : name;
     } else if (players.length === 4) {
-      return name.length > 6 ? `${name.slice(0, 7)}.` : name;
+      return name.length > 7 ? `${name.slice(0, 7)}.` : name;
     }
     return name;
   };
