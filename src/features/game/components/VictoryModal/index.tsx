@@ -1,7 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { useScore } from '@/features/game/store/gameStore';
+import { Dialog, DialogContent, DialogTitle } from '@/ui/components/dialog';
+import { WinnerCard } from './WinnerCard';
+import { VictoryPlayerCard } from './VictoryPlayerCard';
+import { useScore } from '@/store/gameStore';
 
 interface VictoryModalProps {
   isOpen: boolean;
@@ -22,40 +24,18 @@ export const VictoryModal: FC<VictoryModalProps> = ({ isOpen, onClose, onNewGame
         <DialogTitle className="sr-only">
           {t('victory.title')} {winner?.name ? `- ${winner.name}` : ''}
         </DialogTitle>
-        <div className="text-center space-y-4">
-          <div className="text-6xl animate-bounce">🏆</div>
-          <h2 className="text-3xl font-bold text-purple-900">{t('victory.title')}</h2>
 
-          {winner && (
-            <>
-              <p className="text-xl text-purple-600">
-                <b> {winner.name}</b> {t('victory.winner')}
-              </p>
-              <div className="inline-block border-2 border-purple-900 rounded-lg px-4 py-2">
-                <p className="text-2xl font-bold text-purple-900">
-                  {winner.score} {t('victory.points')}
-                </p>
-              </div>
-            </>
-          )}
-        </div>
+        <WinnerCard name={winner.name} score={winner.score} />
+
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-purple-900">{t('victory.scores')}</h3>
           <div className="space-y-2">
-            {leaderboard.map((player, index) => {
-              const { id, score, name } = player;
-              return (
-                <div key={id} className="flex items-center justify-between p-3 rounded-lg bg-purple-50">
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}</span>
-                    <span className="font-medium text-purple-900">{name}</span>
-                  </div>
-                  <span className="font-bold text-purple-900">{score}</span>
-                </div>
-              );
-            })}
+            {leaderboard.map((player, index) => (
+              <VictoryPlayerCard key={player.id} name={player.name} score={player.score} index={index} />
+            ))}
           </div>
         </div>
+
         <div className="flex gap-4">
           <button onClick={onClose} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-4 rounded-xl transition-colors text-lg">
             {t('victory.actions.close')}

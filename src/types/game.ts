@@ -10,6 +10,13 @@ export enum SectionEnum {
 
 export type ScoreState = 'crossed' | number | undefined;
 
+interface BaseScoreCategoryUI {
+  name: string;
+  description: string;
+  section: SectionEnum;
+  icon: string;
+  color: string;
+}
 interface StandardScoreCategoryUI extends BaseScoreCategoryUI {
   id: UpperCategory | LowerCategory;
   maxScore: number;
@@ -20,13 +27,6 @@ interface BonusScoreCategoryUI extends BaseScoreCategoryUI {
 }
 
 export type ScoreCategoryUI = StandardScoreCategoryUI | BonusScoreCategoryUI;
-interface BaseScoreCategoryUI {
-  name: string;
-  description: string;
-  section: SectionEnum;
-  icon: string;
-  color: string;
-}
 
 interface BasePlayer {
   id: string;

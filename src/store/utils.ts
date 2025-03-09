@@ -1,6 +1,6 @@
+import { BONUS } from '@/features/game/constants/bonus';
+import { SCORE_CATEGORIES } from '@/features/game/constants/categories';
 import { BonusCategory, Player, ScoreCategory, ScoreState, SectionEnum } from '@/types/game';
-import { SCORE_CATEGORIES } from '../constants/categories';
-import { BONUS } from '../constants/bonus';
 
 export const getMaxScore = (category: ScoreCategory): number => {
   const standardCategory = category as Exclude<ScoreCategory, BonusCategory>;

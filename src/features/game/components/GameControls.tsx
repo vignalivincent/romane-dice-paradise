@@ -1,10 +1,10 @@
+import { useGame, usePlayers } from '@/store/gameStore';
+import { Button } from '@/ui/components/button';
+import { InfoMessage } from '@/ui/components/infoMessage';
+import { useToast } from '@/ui/hooks/use-toast';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import { InfoMessage } from '@/components/ui/InfoMessage';
-import { usePlayers } from '../store/gameStore';
-import { useGame } from '../store/gameStore';
-import { useToast } from '@/components/ui/use-toast';
+import { TOAST_MESSAGES } from '../constants/toastMessages';
 
 export const GameControls: FC = () => {
   const { t } = useTranslation();
@@ -16,9 +16,9 @@ export const GameControls: FC = () => {
   const handleStartGame = () => {
     doStartGame();
     toast({
-      variant: 'primary',
-      description: 'Que le meilleure gagne ! 🏆',
-      className: 'text-xl font-bold',
+      variant: TOAST_MESSAGES.gameStarted.variant,
+      description: t(TOAST_MESSAGES.gameStarted.description),
+      className: TOAST_MESSAGES.gameStarted.className,
     });
   };
 

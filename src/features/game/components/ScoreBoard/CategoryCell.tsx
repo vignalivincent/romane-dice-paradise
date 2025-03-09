@@ -1,5 +1,5 @@
 import { FC, CSSProperties } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/cn';
 import { LucideMinusCircle, LucidePlusCircle, LucideTally3, LucideTally4 } from 'lucide-react';
 import { ScoreCategoryUI } from '@/types/game';
 
