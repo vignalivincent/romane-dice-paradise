@@ -1,7 +1,7 @@
 import { StateCreator } from 'zustand';
 import { Player, ScoreCategory, ScoreState } from '@/types/game';
 import { CurrentGameSlice } from './currentGameSlice';
-import { MAX_PLAYERS } from '../../constants/maxPlayers';
+import { MAX_PLAYERS } from '@/features/game/constants/maxPlayers';
 
 export interface PlayersSlice {
   players: Player[];

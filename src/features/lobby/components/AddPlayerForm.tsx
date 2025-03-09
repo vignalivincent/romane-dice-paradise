@@ -1,10 +1,12 @@
 import { FC, useState, KeyboardEvent } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@/ui/components/button';
+import { Input } from '@/ui/components/input';
+import { useToast } from '@/ui/hooks/use-toast';
 import { generateBarbaName } from '@/utils/nameGenerator';
-import { usePlayers } from '@/features/game/store/gameStore';
 import { t } from 'i18next';
+import { usePlayers } from '@/store/gameStore';
+import { TOAST_MESSAGES } from '@/features/game/constants/toastMessages';
+
 interface AddPlayerFormProps {
   onAdd: (name: string) => boolean;
 }
@@ -21,15 +23,15 @@ export const AddPlayerForm: FC<AddPlayerFormProps> = ({ onAdd }) => {
       const success = onAdd(name.trim());
       if (!success) {
         toast({
-          variant: 'destructive',
-          title: 'Erreur',
-          description: 'Un joueur avec ce nom existe déjà',
+          variant: TOAST_MESSAGES.playerExists.variant,
+          title: t(TOAST_MESSAGES.playerExists.title),
+          description: t(TOAST_MESSAGES.playerExists.description),
         });
       } else {
         toast({
-          variant: 'default',
-          title: 'Succès',
-          description: 'Le joueur a été ajouté',
+          variant: TOAST_MESSAGES.playerAdded.variant,
+          title: t(TOAST_MESSAGES.playerAdded.title),
+          description: t(TOAST_MESSAGES.playerAdded.description),
         });
         setName('');
       }
@@ -56,6 +58,7 @@ export const AddPlayerForm: FC<AddPlayerFormProps> = ({ onAdd }) => {
   const isDisabled = !canAddPlayer;
   const placeholder = t('players.input.placeholder');
   const addLabel = t('players.actions.add');
+
   return (
     <div className="flex flex-col sm:flex-row gap-3 w-full">
       <div className="flex-1 flex gap-2">

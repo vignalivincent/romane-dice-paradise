@@ -73,6 +73,7 @@ export const createCurrentGameSlice: StateCreator<CurrentGameSliceDependencies &
       }
 
       addGameToHistory();
+      // Don't call resetGame() here as it conflicts with the state we're setting
 
       return { isStarted: true, isGameEnded: true };
     });
@@ -82,6 +83,7 @@ export const createCurrentGameSlice: StateCreator<CurrentGameSliceDependencies &
     set((state) => ({
       isStarted: false,
       isGameEnded: false,
+      isGameComplete: false, // Make sure isGameComplete is also reset
       players: state.players.map(resetPlayerScores),
     })),
 

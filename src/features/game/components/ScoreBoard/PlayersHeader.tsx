@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Crown, LucideBadgeInfo } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { usePlayers, useScore } from '../../store/gameStore';
+import { cn } from '@/utils/cn';
 import { useScrollDetection } from '@/features/game/hooks/useScrollDetection';
-import { calculateTotal } from '../../store/utils';
+import { usePlayers, useScore } from '@/store/gameStore';
+import { calculateTotal } from '@/store/utils';
 
 interface PlayersHeaderProps {
   isExpanded: boolean;

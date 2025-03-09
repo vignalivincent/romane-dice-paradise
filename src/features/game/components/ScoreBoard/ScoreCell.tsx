@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { useScore } from '../../store/gameStore';
 import { Player, ScoreCategoryUI } from '@/types/game';
+import { useScore } from '@/store/gameStore';
 
 interface ScoreCellProps {
   category: ScoreCategoryUI;

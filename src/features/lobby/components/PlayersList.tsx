@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePlayers } from '@/features/game/store/gameStore';
-import { InfoMessage } from '@/components/ui/InfoMessage';
+import { InfoMessage } from '@/ui/components/infoMessage';
 import { AddPlayerForm } from './AddPlayerForm';
 import { PlayerCard } from './PlayerCard';
+import { usePlayers } from '@/store/gameStore';
 
 export const PlayersList: FC = () => {
   const { t } = useTranslation();

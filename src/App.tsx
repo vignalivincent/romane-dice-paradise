@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PlayersList } from '@/features/players/components/PlayersList';
-import { GameControls } from '@/features/game/components/GameControls';
+import { PlayersList } from '@/features/lobby/components/PlayersList';
 import { ScoreBoard } from '@/features/game/components/ScoreBoard';
-import { Toaster } from '@/components/ui/toaster';
-import { useGame } from '@/features/game/store/gameStore';
 import '@/i18n';
+import { useGame } from './store/gameStore';
+import { Toaster } from './ui/components/toaster';
+import { GameControls } from './features/game/components/GameControls';
 
 const App: FC = () => {
   const { t } = useTranslation();

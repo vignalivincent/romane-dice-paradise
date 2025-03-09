@@ -163,6 +163,17 @@
     },
     "yahtzee": {
       "description": "🌟 {{name}}, tu es une légende !"
+    },
+    "gameStarted": {
+      "description": "Que le meilleur gagne ! 🏆"
+    },
+    "playerExists": {
+      "title": "Erreur",
+      "description": "Un joueur avec ce nom existe déjà"
+    },
+    "playerAdded": {
+      "title": "Succès",
+      "description": "Le joueur a été ajouté"
     }
   },
   "animations": {

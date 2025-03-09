@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ScoreCategory, ScoreState } from '@/types/game';
+import { Player, ScoreCategory } from '@/types/game';
+import { getPotentialScoreListByCategory } from '../constants/potentialScore';
+import { useScore } from '@/store/gameStore';
+import { toast } from '@/ui/hooks/use-toast';
+import { TOAST_MESSAGES } from '../constants/toastMessages';
+import { t } from 'i18next';
+import { getMaxScore } from '@/store/utils';
 
 const MIN_CHANCE_VALUE = 1;
 const MAX_CHANCE_VALUE = 30;
@@ -7,15 +13,13 @@ const MAX_CHANCE_VALUE = 30;
 interface UseScoreModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onScoreUpdate: (score: ScoreState) => void;
-  category: {
-    id: ScoreCategory;
-    name: string;
-    description: string;
-  };
+  player: Player;
+  category: ScoreCategory;
+  onYahtzee: () => void;
 }
 
-export const useScoreModal = ({ isOpen, onClose, onScoreUpdate, category }: UseScoreModalProps) => {
+export const useScoreModal = ({ isOpen, onClose, category, player, onYahtzee }: UseScoreModalProps) => {
+  const { doUpdateScore } = useScore();
   const [chanceValue, setChanceValue] = useState<string>('');
 
   useEffect(() => {
@@ -38,58 +42,47 @@ export const useScoreModal = ({ isOpen, onClose, onScoreUpdate, category }: UseS
   const handleChanceSubmit = () => {
     const value = parseInt(chanceValue);
     if (!isNaN(value) && value >= MIN_CHANCE_VALUE && value <= MAX_CHANCE_VALUE) {
-      onScoreUpdate(value);
+      doUpdateScore(player.id, category, value);
       onClose();
     }
   };
 
   const handleReset = () => {
     setChanceValue('');
-    onScoreUpdate(undefined);
+    doUpdateScore(player.id, category, undefined);
     onClose();
   };
 
   const handleCrossOut = () => {
-    onScoreUpdate('crossed');
+    doUpdateScore(player.id, category, 'crossed');
+    toast({
+      variant: TOAST_MESSAGES.zeroScore.variant,
+      title: t(TOAST_MESSAGES.zeroScore.title),
+      description: t(TOAST_MESSAGES.zeroScore.description, { name: player.name }),
+      className: TOAST_MESSAGES.zeroScore.className,
+    });
     onClose();
   };
 
   const handleScoreSelect = (score: number) => {
-    onScoreUpdate(score);
-    onClose();
-  };
-
-  const calculatePossibleScores = (category: ScoreCategory): number[] => {
-    switch (category) {
-      case 'ones':
-        return [1, 2, 3, 4, 5];
-      case 'twos':
-        return [2, 4, 6, 8, 10];
-      case 'threes':
-        return [3, 6, 9, 12, 15];
-      case 'fours':
-        return [4, 8, 12, 16, 20];
-      case 'fives':
-        return [5, 10, 15, 20, 25];
-      case 'sixes':
-        return [6, 12, 18, 24, 30];
-      case 'threeOfAKind':
-        return [30];
-      case 'fourOfAKind':
-        return [40];
-      case 'fullHouse':
-        return [25];
-      case 'smallStraight':
-        return [30];
-      case 'largeStraight':
-        return [40];
-      case 'yahtzee':
-        return [50];
-      case 'chance':
-        return [5, 10, 15, 20, 25, 30];
-      default:
-        return [];
+    doUpdateScore(player.id, category, score);
+    if (score === getMaxScore(category)) {
+      toast({
+        variant: TOAST_MESSAGES.maxScore.variant,
+        title: t(TOAST_MESSAGES.maxScore.title),
+        description: t(TOAST_MESSAGES.maxScore.description, { name: player.name }),
+        className: TOAST_MESSAGES.maxScore.className,
+      });
     }
+    if (category === 'yahtzee') {
+      toast({
+        variant: TOAST_MESSAGES.yahtzee.variant,
+        description: t(TOAST_MESSAGES.yahtzee.description, { name: player.name }),
+        className: TOAST_MESSAGES.yahtzee.className,
+      });
+      onYahtzee();
+    }
+    onClose();
   };
 
   return {
@@ -99,6 +92,6 @@ export const useScoreModal = ({ isOpen, onClose, onScoreUpdate, category }: UseS
     handleReset,
     handleCrossOut,
     handleScoreSelect,
-    possibleScores: calculatePossibleScores(category.id),
+    possibleScores: getPotentialScoreListByCategory(category),
   };
 };

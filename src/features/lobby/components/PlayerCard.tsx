@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/ui/components/button';
+import { Card } from '@/ui/components/card';
 import { Player } from '@/types/game';
 import { t } from 'i18next';
 
