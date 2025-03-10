@@ -130,7 +130,7 @@ Le moyen le plus simple de contribuer au projet est d'utiliser Docker, qui garan
    make up
    ```
 
-   C'est tout ! L'application est maintenant accessible sur <http://localhost:3000>
+   C'est tout ! L'application est maintenant accessible sur <http://localhost:5173>
 
 3. **Développer**
 
@@ -215,7 +215,7 @@ cd yamsAttack
 make up
 ```
 
-Accédez à l'application sur <http://localhost:3000>
+Accédez à l'application sur <http://localhost:5173>
 
 ## 📋 Informations sur le Repository
 
@@ -291,7 +291,7 @@ Docker provides a consistent development environment for all contributors. To ge
 
 3. **Access the Application**
 
-   - The app will be available at <http://localhost:3000> (or your configured port)
+   - The app will be available at <http://localhost:5173> (or your configured port)
 
 4. **Running Commands Inside the Container**
 
